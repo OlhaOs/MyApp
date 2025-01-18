@@ -1,9 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ImageBackground } from 'react-native';
 import InputField from '../copmonents/InputField';
 import MainButton from '../copmonents/MainButton';
 import { useFonts } from 'expo-font';
 import AvatarPlace from '../copmonents/AvatarPlace';
+import bgImage from '../assets/images/Photo BG.png';
+
+
 
 export default function RegistrationScreen() {
   const [fontsLoaded] = useFonts({
@@ -15,19 +18,32 @@ export default function RegistrationScreen() {
     return null;
   }
   return (
-    <View style={styles.containerForm}>
-      <AvatarPlace />
-      <Text style={styles.titleText}>Реєстрація</Text>
-      <InputField placeholder='Логін' />
-      <InputField placeholder='Адреса електронної пошти' />
-      <InputField placeholder='Пароль' isTextShow={true} />
-      <MainButton textButton={'Зареєструватися'} />
-      <Text style={styles.smallText}>Вже є аккаунт? Увійти</Text>
+    <ImageBackground source={bgImage} resizeMode="cover" style={styles.image}>
+    <View style={styles.container}>
+      <View style={styles.containerForm}>
+        <AvatarPlace />
+        <Text style={styles.titleText}>Реєстрація</Text>
+        <InputField placeholder="Логін" />
+        <InputField placeholder="Адреса електронної пошти" />
+        <InputField placeholder="Пароль" isTextShow={true} />
+        <MainButton textButton="Зареєструватися" />
+        <Text style={styles.smallText}>Вже є аккаунт? Увійти</Text>
+      </View>    
     </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  image: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
   containerForm: {
     position: 'relative',
     width: '100%',
