@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import { useFonts } from 'expo-font';
 import InputField from '../../src/copmonents/InputField';
 import MainButton from '../../src/copmonents/MainButton';
 import bgImage from '../../assets/images/Photo BG.png';
@@ -36,14 +35,6 @@ export default function LoginScreenScreen() {
     }));
   };
 
-  const [fontsLoaded] = useFonts({
-    'Roboto-Regular': require('../../assets/fonts/Roboto_Condensed-Regular.ttf'),
-    'Roboto-Medium': require('../../assets/fonts/Roboto_Condensed-Medium.ttf'),
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.wrapper}>
