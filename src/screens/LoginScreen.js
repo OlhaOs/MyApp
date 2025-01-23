@@ -12,6 +12,7 @@ import MainButton from '../../src/copmonents/MainButton';
 import bgImage from '../../assets/images/Photo BG.png';
 import { colors } from '../../styles/global';
 
+
 export default function LoginScreenScreen() {
   const [formData, setFormdata] = useState({
     email: '',
