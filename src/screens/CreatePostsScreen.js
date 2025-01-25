@@ -8,15 +8,18 @@ import Location from '../../assets/icons/Location';
 import { colors } from '../../styles/global';
 import InputField from '../copmonents/InputField';
 import MainButton from '../copmonents/MainButton';
+import Header from '../copmonents/Header';
 // import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default function CreatePostsScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <GoBack />
-        <Text style={styles.title}>Створити публікацію</Text>
-      </View>
+      <Header
+        text='Створити публікацію'
+        icon={<GoBack />}
+        iconPosition='left'
+      />
+
       <View style={styles.publicationContainer}>
         <View style={styles.imageContainer}>
           <View style={styles.cameraIconContainer}>
@@ -103,22 +106,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 32,
   },
-  headerContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    gap: 58,
-    height: 44,
-    borderBottomColor: colors.border_gray,
-    borderBottomWidth: 0.5,
-  },
-  title: {
-    marginTop: 11,
-    marginBottom: 11,
-    fontFamily: 'Roboto-Medium',
-    fontSize: 17,
-  },
+
   publicationContainer: {
     width: '100%',
     gap: 8,

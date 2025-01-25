@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
   containerHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-
     height: 44,
   },
   text: {
@@ -41,7 +40,7 @@ const styles = StyleSheet.create({
   },
   iconRight: {
     position: 'absolute',
-    right: 16,
+    right: 0,
     justifyContent: 'center',
     alignItems: 'center',
   },

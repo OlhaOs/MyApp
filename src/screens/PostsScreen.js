@@ -7,14 +7,12 @@ import userFoto from '../../assets/images/avatar.jpg';
 import FooterGrid from '../../assets/icons/FooterGrid';
 import User from '../../assets/icons/User';
 import PlusInCircle from '../../assets/icons/PlusInCircle';
+import Header from '../copmonents/Header';
 
 export default function PostsScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.title}>Публікації</Text>
-        <LogOut />
-      </View>
+      <Header icon={<LogOut />} text='Публікації' iconPosition='right' />
       <View style={styles.publicationContainer}>
         <View style={styles.avatar}>
           <Image source={userFoto} />
@@ -49,23 +47,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 32,
   },
-  headerContainer: {
-    width: '100%',
-    height: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    gap: 109,
 
-    borderBottomColor: colors.border_gray,
-    borderBottomWidth: 0.5,
-  },
-  title: {
-    marginTop: 11,
-    marginBottom: 11,
-    fontFamily: 'Roboto-Medium',
-    fontSize: 17,
-  },
   publicationContainer: {
     width: '100%',
     flexDirection: 'row',
