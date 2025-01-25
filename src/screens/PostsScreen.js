@@ -7,7 +7,7 @@ import userFoto from '../../assets/images/avatar.jpg';
 import FooterGrid from '../../assets/icons/FooterGrid';
 import User from '../../assets/icons/User';
 import PlusInCircle from '../../assets/icons/PlusInCircle';
-import Header from '../copmonents/Header';
+import Header from '../components/Header';
 
 export default function PostsScreen() {
   return (

@@ -6,9 +6,9 @@ import GoBack from '../../assets/icons/GoBack';
 import Cart from '../../assets/icons/Cart';
 import Location from '../../assets/icons/Location';
 import { colors } from '../../styles/global';
-import InputField from '../copmonents/InputField';
-import MainButton from '../copmonents/MainButton';
-import Header from '../copmonents/Header';
+import InputField from '../components/InputField';
+import MainButton from '../components/MainButton';
+import Header from '../components/Header';
 // import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default function CreatePostsScreen() {

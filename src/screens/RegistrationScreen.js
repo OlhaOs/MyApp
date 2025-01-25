@@ -7,9 +7,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import InputField from '../../src/copmonents/InputField';
-import MainButton from '../../src/copmonents/MainButton';
-import AvatarPlace from '../../src/copmonents/AvatarPlace';
+import InputField from '../../src/components/InputField';
+import MainButton from '../../src/components/MainButton';
+import AvatarPlace from '../../src/components/AvatarPlace';
 import bgImage from '../../assets/images/Photo BG.png';
 import { colors } from '../../styles/global';
 

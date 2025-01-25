@@ -2,7 +2,7 @@ import react from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { colors } from '../../styles/global';
 import GoBack from '../../assets/icons/GoBack';
-import Header from '../copmonents/Header';
+import Header from '../components/Header';
 
 export default function CommentsScreen() {
   return (

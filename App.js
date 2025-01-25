@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 // import RegistrationScreen from './src/screens/RegistrationScreen';
 // import LoginScreen from './src/screens/LoginScreen';
-import PostsScreen from './src/screens/PostsScreen';
+// import PostsScreen from './src/screens/PostsScreen';
 // import CreatePostsScreen from './src/screens/CreatePostsScreen';
 import HomeIndicator from './src/copmonents/HomeIndicator';
 import { useFonts } from 'expo-font';
@@ -19,9 +19,9 @@ export default function App() {
   }
   return (
     <>
-      {/* <CommentsScreen /> */}
+      <CommentsScreen />
       {/* <CreatePostsScreen /> */}
-      <PostsScreen />
+      {/* <PostsScreen /> */}
       {/* <LoginScreen /> */}
       {/* <RegistrationScreen /> */}
       <StatusBar style='auto' />
