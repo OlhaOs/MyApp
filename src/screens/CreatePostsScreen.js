@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 
 import Camera from '../../assets/icons/Camera';
 import GoBack from '../../assets/icons/GoBack';
+import Cart from '../../assets/icons/Cart';
 import Location from '../../assets/icons/Location';
 import { colors } from '../../styles/global';
 import InputField from '../copmonents/InputField';
@@ -77,11 +78,16 @@ export default function CreatePostsScreen() {
           /> */}
           </View>
         </View>
+      </View>
+      <View style={styles.buttonsContainer}>
         <MainButton
           textButton={'Опублікувати'}
           outer={styles.outerButtton}
           textOuter={styles.textButton}
         />
+        <View style={styles.CartIconContainer}>
+          <Cart />
+        </View>
       </View>
     </View>
   );
@@ -90,10 +96,15 @@ export default function CreatePostsScreen() {
 const styles = StyleSheet.create({
   container: {
     marginTop: 44,
-    marginLeft: 16,
-    marginRight: 16,
+    paddingBottom: 34,
+    paddingLeft: 16,
+    paddingRight: 16,
+    flex: 1,
+    alignItems: 'center',
+    gap: 32,
   },
   headerContainer: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -109,11 +120,10 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   publicationContainer: {
-    marginTop: 32,
+    width: '100%',
     gap: 8,
   },
   imageContainer: {
-    width: '100%',
     height: 240,
     alignItems: 'center',
     justifyContent: 'center',
@@ -137,8 +147,6 @@ const styles = StyleSheet.create({
     color: colors.text_gray,
   },
   inputWrap: {
-    marginTop: 32,
-    marginBottom: 32,
     gap: 8,
   },
   inputContainer: {
@@ -167,5 +175,19 @@ const styles = StyleSheet.create({
   },
   textButton: {
     color: colors.text_gray,
+  },
+  buttonsContainer: {
+    width: '100%',
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  CartIconContainer: {
+    width: 70,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.light_gray,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
