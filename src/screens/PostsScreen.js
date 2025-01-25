@@ -4,6 +4,9 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import LogOut from '../../assets/icons/LogOut';
 import { colors } from '../../styles/global';
 import userFoto from '../../assets/images/avatar.jpg';
+import FooterGrid from '../../assets/icons/FooterGrid';
+import User from '../../assets/icons/User';
+import PlusInCircle from '../../assets/icons/PlusInCircle';
 
 export default function PostsScreen() {
   return (
@@ -21,18 +24,34 @@ export default function PostsScreen() {
           <Text style={styles.UserEmail}>email@example.com</Text>
         </View>
       </View>
+      <View style={styles.footerContainer}>
+        <FooterGrid />
+        <View style={styles.iconContaner}>
+          <PlusInCircle
+            fill={colors.orange}
+            stroke='none'
+            plusColor={colors.white}
+          />
+        </View>
+        <User />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    height: 44,
     marginTop: 44,
-    marginLeft: 16,
-    marginRight: 16,
+    paddingBottom: 32,
+    paddingLeft: 16,
+    paddingRight: 16,
+    flex: 1,
+    alignItems: 'center',
+    gap: 32,
   },
   headerContainer: {
+    width: '100%',
+    height: 44,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -48,10 +67,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   publicationContainer: {
+    width: '100%',
     flexDirection: 'row',
-    marginTop: 32,
+    flexGrow: 1,
+
     gap: 8,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   avatar: {
     width: 60,
@@ -68,5 +89,27 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: colors.black_primary,
     opacity: 0.8,
+  },
+
+  footerContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    gap: 32,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderColor: colors.border_gray,
+  },
+
+  iconContaner: {
+    width: 70,
+    height: 40,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    backgroundColor: colors.orange,
+    borderRadius: 20,
   },
 });

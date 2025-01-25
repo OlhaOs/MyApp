@@ -96,7 +96,7 @@ export default function CreatePostsScreen() {
 const styles = StyleSheet.create({
   container: {
     marginTop: 44,
-    paddingBottom: 34,
+    paddingBottom: 32,
     paddingLeft: 16,
     paddingRight: 16,
     flex: 1,
