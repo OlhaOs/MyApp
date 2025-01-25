@@ -2,17 +2,17 @@ import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
 import { colors } from '../../styles/global';
 
-export default function MainButton({ textButton, data }) {
+export default function MainButton({ textButton, data, outer, textOuter }) {
   return (
-    <Pressable style={styles.button} onPress={data}>
-      <Text style={styles.textButton}>{textButton}</Text>
+    <Pressable style={[styles.button, outer]} onPress={data}>
+      <Text style={[styles.textButton, textOuter]}>{textButton}</Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    width: 343,
+    width: '100%',
     height: 51,
     alignItems: 'center',
     justifyContent: 'center',

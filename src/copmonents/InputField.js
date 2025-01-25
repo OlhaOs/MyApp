@@ -8,6 +8,7 @@ export default function InputField({
   isShowButton,
   onChangeText,
   showPassword,
+  outerStyles,
 }) {
   const [isFocused, setIsFocused] = useState(false);
   const onFocus = () => {
@@ -18,7 +19,13 @@ export default function InputField({
   };
 
   return (
-    <View style={[styles.inputContainer, isFocused && styles.focusedInput]}>
+    <View
+      style={[
+        styles.inputContainer,
+        isFocused && styles.focusedInput,
+        outerStyles,
+      ]}
+    >
       <TextInput
         onFocus={onFocus}
         onBlur={onBlur}
@@ -44,7 +51,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
 
-    width: 343,
+    width: '100%',
     height: 50,
     paddingRight: 16,
     paddingLeft: 16,

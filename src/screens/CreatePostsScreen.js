@@ -1,9 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
+import Camera from '../../assets/icons/Camera';
 import GoBack from '../../assets/icons/GoBack';
+import Location from '../../assets/icons/Location';
 import { colors } from '../../styles/global';
-
+import InputField from '../copmonents/InputField';
+import MainButton from '../copmonents/MainButton';
+// import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default function CreatePostsScreen() {
   return (
@@ -12,14 +16,79 @@ export default function CreatePostsScreen() {
         <GoBack />
         <Text style={styles.title}>Створити публікацію</Text>
       </View>
-      <View style={styles.publicationContainer}></View>
+      <View style={styles.publicationContainer}>
+        <View style={styles.imageContainer}>
+          <View style={styles.cameraIconContainer}>
+            <Camera />
+          </View>
+        </View>
+        <Text style={styles.textSecondary}>Завантажте фото</Text>
+        <View style={styles.inputWrap}>
+          <View style={styles.inputContainer}>
+            <InputField outerStyles={styles.input} placeholder={'Назва...'} />
+          </View>
+          <View style={styles.inputContainer}>
+            <Location style={styles.iconLocation} />
+            <InputField
+              outerStyles={styles.input}
+              placeholder={'Місцевість...'}
+            />
+
+            {/* <GooglePlacesAutocomplete
+            placeholder='Місцевість...'
+            minLength={4}
+            enablePoweredByContainer={false}
+            fetchDetails
+            onPress={(data, details = null) => {
+              // 'details' is provided when fetchDetails = true
+              // console.log(data, details);
+              setAddress(data.description);
+            }}
+            query={{ key: PLACES_KEY }}
+            styles={{
+              container: {
+                flex: 1,
+              },
+              textInputContainer: {
+                flexDirection: 'row',
+                paddingHorizontal: 8,
+              },
+              textInput: {
+                paddingVertical: 5,
+                paddingHorizontal: 10,
+                fontSize: 15,
+                flex: 1,
+                borderBottomWidth: 1,
+                borderColor: colors.border_gray,
+              },
+              row: {
+                backgroundColor: '#FFFFFF',
+                padding: 13,
+                height: 44,
+                flexDirection: 'row',
+              },
+              predefinedPlacesDescription: {
+                color: '#1faadb',
+              },
+              listView: {
+                maxHeight: 160,
+              },
+            }}
+          /> */}
+          </View>
+        </View>
+        <MainButton
+          textButton={'Опублікувати'}
+          outer={styles.outerButtton}
+          textOuter={styles.textButton}
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    height: 44,
     marginTop: 44,
     marginLeft: 16,
     marginRight: 16,
@@ -29,7 +98,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     gap: 58,
-
+    height: 44,
     borderBottomColor: colors.border_gray,
     borderBottomWidth: 0.5,
   },
@@ -40,25 +109,63 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   publicationContainer: {
-    flexDirection: 'row',
     marginTop: 32,
     gap: 8,
-    alignItems: 'center',
   },
-  avatar: {
+  imageContainer: {
+    width: '100%',
+    height: 240,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    backgroundColor: colors.light_gray,
+    borderColor: colors.border_gray,
+    borderRadius: 8,
+  },
+  cameraIconContainer: {
     width: 60,
     height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
 
-    borderRadius: 16,
+    backgroundColor: colors.white,
+    borderRadius: 100,
   },
-  UserName: {
-    fontFamily: 'Roboto-Bold',
-    fontSize: 13,
-  },
-  UserEmail: {
+  textSecondary: {
     fontFamily: 'Roboto-Regular',
-    fontSize: 11,
-    color: colors.black_primary,
-    opacity: 0.8,
+    fontSize: 16,
+    color: colors.text_gray,
+  },
+  inputWrap: {
+    marginTop: 32,
+    marginBottom: 32,
+    gap: 8,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 0,
+    borderBottomWidth: 1,
+    borderColor: colors.border_gray,
+  },
+  input: {
+    paddingLeft: 0,
+    paddingRight: 0,
+    backgroundColor: colors.white,
+    borderWidth: 0,
+  },
+  inputIcon: {
+    borderBottomWidth: 0,
+  },
+  iconLocation: {
+    marginLeft: 16,
+  },
+  outerButtton: {
+    marginTop: 0,
+    backgroundColor: colors.light_gray,
+  },
+  textButton: {
+    color: colors.text_gray,
   },
 });
