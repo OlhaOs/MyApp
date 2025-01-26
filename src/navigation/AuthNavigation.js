@@ -5,7 +5,7 @@ import RegistrationScreen from '../screens/RegistrationScreen';
 import PostsScreen from '../screens/PostsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import CommentsScreen from '../screens/CommentsScreen';
-// import LogoutButton from "../components/LogoutButton";
+import BottomTabNavigator from './BottomTabNavigator';
 
 const Stack = createStackNavigator();
 
@@ -17,26 +17,12 @@ const AuthNavigator = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen
-        name='Login'
-        component={LoginScreen}
-        options={
-          {
-            //   headerRightContainerStyle: { paddingRight: 8 },
-            //   headerRight: () => <LogoutButton />,
-          }
-        }
-      />
-      <Stack.Screen
-        name='SignUp'
-        component={RegistrationScreen}
-        options={{
-          title: 'Second Screen',
-        }}
-      />
-      <Stack.Screen name='Home' component={PostsScreen} options={{}} />
-      <Stack.Screen name='Profile' component={ProfileScreen} options={{}} />
-      <Stack.Screen name='Comment' component={CommentsScreen} options={{}} />
+      <Stack.Screen name='Home' component={BottomTabNavigator} />
+      <Stack.Screen name='Login' component={LoginScreen} />
+      <Stack.Screen name='SignUp' component={RegistrationScreen} />
+      {/* <Stack.Screen name='Home' component={PostsScreen} /> */}
+      {/* <Stack.Screen name='Profile' component={ProfileScreen} />
+      <Stack.Screen name='Comment' component={CommentsScreen} /> */}
     </Stack.Navigator>
   );
 };

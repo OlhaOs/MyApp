@@ -8,15 +8,12 @@ const footerGrid = props => (
     fill='none'
     {...props}
   >
-    <Path fill='#fff' d='M8 8h24v24H8z' />
     <Path
-      stroke='#212121'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      strokeOpacity={0.8}
+      stroke={props.stroke || '#212121'} // Чорний контур за замовчуванням
+      fill='none' // Без заливки
       d='M11 11h7v7h-7v-7ZM22 11h7v7h-7v-7ZM22 22h7v7h-7v-7ZM11 22h7v7h-7v-7Z'
-      clipRule='evenodd'
     />
   </Svg>
 );
+
 export default footerGrid;

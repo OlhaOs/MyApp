@@ -1,12 +1,13 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import Ionicons from '@expo/vector-icons/Ionicons';
-
 import { colors } from '../../styles/global';
-
-// import MapScreen from '../screens/MapScreen';
-// import ProfileScreen from '../screens/ProfileScreen';
-// import LogoutButton from '../components/LogoutButton';
+import ProfileScreen from '../screens/ProfileScreen';
+import PostsScreen from '../screens/PostsScreen';
+import FooterGrid from '../../assets/icons/FooterGrid';
+import User from '../../assets/icons/User';
+import CreatePostsScreen from '../screens/CreatePostsScreen';
+import Plus from '../../assets/icons/Plus';
+import TabIcon from '../components/TabIcon';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,45 +16,42 @@ const BottomTabNavigator = () => {
     <Tab.Navigator
       initialRouteName='Profile'
       screenOptions={({ navigation }) => ({
-        tabBarLabel: 'label',
+        headerShown: true,
+        tabBarShowLabel: false,
         tabBarStyle: {
-          display: 'flex',
-          paddingVertical: 16,
+          paddingTop: 8,
         },
       })}
     >
       <Tab.Screen
-        name='Map'
-        component={MapScreen}
-        options={({ navigation }) => ({
-          title: 'Map',
+        name='Posts'
+        component={PostsScreen}
+        options={{
+          tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name='map'
-              size={32}
-              color={focused ? colors.orange : 'black'}
-            />
+            <TabIcon icon={FooterGrid} focused={focused} />
           ),
-        })}
+        }}
       />
-
+      <Tab.Screen
+        name='CreatePost'
+        component={CreatePostsScreen}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon icon={Plus} focused={focused} />
+          ),
+        }}
+      />
       <Tab.Screen
         name='Profile'
         component={ProfileScreen}
-        options={({ navigation }) => ({
-          title: 'Profile',
-          headerRightContainerStyle: { paddingRight: 8 },
-          headerRight: () => (
-            <LogoutButton onPress={() => console.log('log out')} />
-          ),
+        options={{
+          tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name='person'
-              size={32}
-              color={focused ? colors.orange : 'black'}
-            />
+            <TabIcon icon={User} focused={focused} />
           ),
-        })}
+        }}
       />
     </Tab.Navigator>
   );
@@ -67,6 +65,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.orange,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  iconContainer: {
+    width: 70,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.light_gray,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  focusedContainer: {
+    backgroundColor: colors.orange,
   },
 });
 

@@ -1,19 +1,18 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import LogOut from '../../assets/icons/LogOut';
 import { colors } from '../../styles/global';
 import userFoto from '../../assets/images/avatar.jpg';
-import FooterGrid from '../../assets/icons/FooterGrid';
-import User from '../../assets/icons/User';
-import PlusInCircle from '../../assets/icons/PlusInCircle';
+
 import Header from '../components/Header';
 import Avatar from '../components/Avatar';
 
 export default function PostsScreen({ route, navigation }) {
   const onLogin = () => {
-    navigation.navigate('Login');
+    navigation.navigate('Login'); // Перехід на екран Login
   };
+
   return (
     <>
       <Header
@@ -30,17 +29,6 @@ export default function PostsScreen({ route, navigation }) {
             <Text style={styles.UserEmail}>email@example.com</Text>
           </View>
         </View>
-        <View style={styles.footerContainer}>
-          <FooterGrid />
-          <View style={styles.iconContaner}>
-            <PlusInCircle
-              fill={colors.orange}
-              stroke='none'
-              plusColor={colors.white}
-            />
-          </View>
-          <User />
-        </View>
       </View>
     </>
   );
@@ -48,20 +36,20 @@ export default function PostsScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 44,
+    paddingTop: 44,
     paddingBottom: 32,
     paddingLeft: 16,
     paddingRight: 16,
     flex: 1,
     alignItems: 'center',
     gap: 32,
+    backgroundColor: colors.white,
   },
 
   publicationContainer: {
     width: '100%',
     flexDirection: 'row',
     flexGrow: 1,
-
     gap: 8,
     alignItems: 'flex-start',
   },
@@ -75,27 +63,5 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: colors.black_primary,
     opacity: 0.8,
-  },
-
-  footerContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    gap: 32,
-    paddingTop: 8,
-    borderTopWidth: 1,
-    borderColor: colors.border_gray,
-  },
-
-  iconContaner: {
-    width: 70,
-    height: 40,
-
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    backgroundColor: colors.orange,
-    borderRadius: 20,
   },
 });
