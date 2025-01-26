@@ -1,69 +1,109 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
   Text,
   ImageBackground,
-  TouchableWithoutFeedback,
-  Keyboard,
+  Image,
+  ScrollView,
 } from 'react-native';
-import InputField from '../../src/components/InputField';
-import MainButton from '../../src/components/MainButton';
+
 import AvatarPlace from '../../src/components/AvatarPlace';
 import bgImage from '../../assets/images/Photo BG.png';
 import { colors } from '../../styles/global';
+import img1 from '../../assets/images/Content Block 2.jpg';
+import img2 from '../../assets/images/Content Block.jpg';
+import img3 from '../../assets/images/Content Block 3.jpg';
+import Comment from '../../assets/icons/Comment';
+import Like from '../../assets/icons/Like';
+import Location from '../../assets/icons/Location';
+import LogOut from '../../assets/icons/LogOut';
 
 export default function ProfileScreen({ route, navigation }) {
-
-<Header
-        icon={<LogOut onPress={onLogin} />}
-        text='Публікації'
-        iconPosition='right'
-      />
-
- 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.wrapper}>
-        <ImageBackground
-          source={bgImage}
-          resizeMode='cover'
-          style={styles.image}
-        >
-          <View style={styles.containerForm}>
-            <Text style={styles.titleText}>Реєстрація</Text>
-            <AvatarPlace />
-            <View style={styles.containerInput}>
-              <InputField
-                onChangeText={value => handleInputChange(value, 'login')}
-                placeholder='Логін'
-                value={formData.login}
-              />
-              <InputField
-                placeholder='Адреса електронної пошти'
-                onChangeText={value => handleInputChange(value, 'email')}
-                value={formData.email}
-              />
-              <InputField
-                placeholder='Пароль'
-                onChangeText={value => handleInputChange(value, 'password')}
-                value={formData.password}
-                isPasswordVisible={isPasswordVisible}
-                isShowButton={true}
-                showPassword={showPassword}
-              />
-            </View>
-            <MainButton textButton='Зареєструватися' onPress={onHome} />
-            <Text style={styles.smallText}>
-              Вже є аккаунт?
-              <TouchableWithoutFeedback onPress={onLogin}>
-                <Text style={styles.signUpText}> Увійти</Text>
-              </TouchableWithoutFeedback>
-            </Text>
+    <ScrollView
+      style={styles.wrapper}
+      contentContainerStyle={styles.contentContainer}
+    >
+      <ImageBackground source={bgImage} resizeMode='cover' style={styles.image}>
+        <View style={styles.containerProfile}>
+          <AvatarPlace />
+          <View style={styles.iconLogOut}>
+            <LogOut />
           </View>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
+          <Text style={styles.titleText}>Natali Romanova</Text>
+          <View style={styles.cardContainer}>
+            <View style={styles.imageContainer}>
+              <Image source={img1} style={styles.image}></Image>
+            </View>
+            <Text style={styles.smallText}>Ліс</Text>
+            <View style={styles.detailsContainer}>
+              <View style={styles.details}>
+                <View style={styles.comment}>
+                  <Comment />
+                  <Text>8</Text>
+                </View>
+                <View style={styles.comment}>
+                  <Like />
+                  <Text>153</Text>
+                </View>
+              </View>
+
+              <View style={styles.comment}>
+                <Location />
+                <Text>Ukraine</Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.cardContainer}>
+            <View style={styles.imageContainer}>
+              <Image source={img2} style={styles.image}></Image>
+            </View>
+            <Text style={styles.smallText}>Захід на Чорному морі</Text>
+            <View style={styles.detailsContainer}>
+              <View style={styles.details}>
+                <View style={styles.comment}>
+                  <Comment />
+                  <Text>3</Text>
+                </View>
+                <View style={styles.comment}>
+                  <Like />
+                  <Text>200</Text>
+                </View>
+              </View>
+
+              <View style={styles.comment}>
+                <Location />
+                <Text>Ukraine</Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.cardContainer}>
+            <View style={styles.imageContainer}>
+              <Image source={img3} style={styles.image}></Image>
+            </View>
+            <Text style={styles.smallText}>Старий будиночок у Венеції</Text>
+            <View style={styles.detailsContainer}>
+              <View style={styles.details}>
+                <View style={styles.comment}>
+                  <Comment />
+                  <Text>50</Text>
+                </View>
+                <View style={styles.comment}>
+                  <Like />
+                  <Text>200</Text>
+                </View>
+              </View>
+
+              <View style={styles.comment}>
+                <Location />
+                <Text>Italy</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </ImageBackground>
+    </ScrollView>
   );
 }
 
@@ -71,17 +111,13 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
   },
-  image: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'flex-end',
-  },
-  containerForm: {
+  //   contentContainer: { flexGrow: 1 },
+  containerProfile: {
     position: 'relative',
     alignItems: 'center',
+    marginTop: 147,
     width: '100%',
-    height: 549,
+
     paddingLeft: 16,
     paddingRight: 16,
     backgroundColor: 'white',
@@ -90,14 +126,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
   },
 
-  containerInput: {
-    alignItems: 'center',
-    gap: 16,
-  },
-
   titleText: {
-    marginTop: 92,
-    marginBottom: 32,
+    marginTop: 46,
     fontFamily: 'Roboto-Medium',
     fontSize: 30,
   },
@@ -105,5 +135,35 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
     color: colors.blue,
+  },
+  iconLogOut: {
+    width: '100%',
+    alignItems: 'flex-end',
+    paddingTop: 22,
+  },
+  cardContainer: {
+    width: '100%',
+    gap: 8,
+    marginTop: 32,
+  },
+  imageContainer: {
+    height: 240,
+  },
+  image: { width: '100%', borderRadius: 8 },
+  commentContainer: {
+    gap: 16,
+  },
+  detailsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  details: {
+    flexDirection: 'row',
+    gap: 24,
+  },
+  comment: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
 });

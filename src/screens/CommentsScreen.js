@@ -1,5 +1,5 @@
-import react from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import { colors } from '../../styles/global';
 import GoBack from '../../assets/icons/GoBack';
 import Header from '../components/Header';
@@ -12,65 +12,71 @@ export default function CommentsScreen() {
   return (
     <>
       <Header icon={<GoBack />} text='Коментарі' iconPosition='left' />
-      <View style={styles.container}>
-        <View style={styles.publicationContainer}>
-          <View style={styles.imageContainer}>
-            <Image source={imgPublication} style={styles.image}></Image>
-          </View>
-        </View>
-        <View style={styles.commentContainer}>
-          <View style={styles.commentWrapper}>
-            <Avatar
-              width={28}
-              height={28}
-              userFoto={require('../../assets/images/Ellipse.jpg')}
-            />
-            <View style={styles.comment}>
-              <Text style={styles.commentText}>
-                Really love your most recent photo. I’ve been trying to capture
-                the same thing for a few months and would love some tips!
-              </Text>
-              <Text style={styles.date}>09 червня, 2020 | 08:40</Text>
+      <ScrollView
+        style={styles.wrapper}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <View style={styles.container}>
+          <View style={styles.publicationContainer}>
+            <View style={styles.imageContainer}>
+              <Image source={imgPublication} style={styles.image}></Image>
             </View>
           </View>
+          <View style={styles.commentContainer}>
+            <View style={styles.commentWrapper}>
+              <Avatar
+                width={28}
+                height={28}
+                userFoto={require('../../assets/images/Ellipse.jpg')}
+              />
+              <View style={styles.comment}>
+                <Text style={styles.commentText}>
+                  Really love your most recent photo. I’ve been trying to
+                  capture the same thing for a few months and would love some
+                  tips!
+                </Text>
+                <Text style={styles.date}>09 червня, 2020 | 08:40</Text>
+              </View>
+            </View>
 
-          <View style={styles.commentWrapper}>
-            <View style={styles.comment}>
-              <Text style={styles.commentText}>
-                A fast 50mm like f1.8 would help with the bokeh. I’ve been using
-                primes as they tend to get a bit sharper images.
-              </Text>
-              <Text style={styles.date}>009 червня, 2020 | 09:14</Text>
+            <View style={styles.commentWrapper}>
+              <View style={styles.comment}>
+                <Text style={styles.commentText}>
+                  A fast 50mm like f1.8 would help with the bokeh. I’ve been
+                  using primes as they tend to get a bit sharper images.
+                </Text>
+                <Text style={styles.date}>009 червня, 2020 | 09:14</Text>
+              </View>
+              <Avatar
+                width={28}
+                height={28}
+                borderRadius={100}
+                userFoto={require('../../assets/images/avatar.jpg')}
+              />
             </View>
-            <Avatar
-              width={28}
-              height={28}
-              borderRadius={100}
-              userFoto={require('../../assets/images/avatar.jpg')}
-            />
-          </View>
 
-          <View style={styles.commentWrapper}>
-            <Avatar
-              width={28}
-              height={28}
-              userFoto={require('../../assets/images/Ellipse.jpg')}
-            />
-            <View style={styles.comment}>
-              <Text style={styles.commentText}>
-                Thank you! That was very helpful!
-              </Text>
-              <Text style={styles.date}>09 червня, 2020 | 09:20</Text>
+            <View style={styles.commentWrapper}>
+              <Avatar
+                width={28}
+                height={28}
+                userFoto={require('../../assets/images/Ellipse.jpg')}
+              />
+              <View style={styles.comment}>
+                <Text style={styles.commentText}>
+                  Thank you! That was very helpful!
+                </Text>
+                <Text style={styles.date}>09 червня, 2020 | 09:20</Text>
+              </View>
             </View>
           </View>
+          <InputField
+            placeholder='Коментувати...'
+            isShowButton={true}
+            IconComponent={() => <Arrow />}
+            outerStyles={styles.input}
+          />
         </View>
-        <InputField
-          placeholder='Коментувати...'
-          isShowButton={true}
-          IconComponent={()=><Arrow />}
-          outerStyles={styles.input}
-        />
-      </View>
+      </ScrollView>
     </>
   );
 }
@@ -142,5 +148,6 @@ const styles = StyleSheet.create({
   },
   input: {
     borderRadius: 100,
+    backgroundColor: colors.light_gray,
   },
 });
