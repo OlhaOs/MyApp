@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { colors } from '../../styles/global';
 
 export default function Header({ icon, text, iconPosition = 'left', onPress }) {
   return (
@@ -21,9 +22,13 @@ export default function Header({ icon, text, iconPosition = 'left', onPress }) {
 
 const styles = StyleSheet.create({
   containerHeader: {
+    marginTop: 44,
     flexDirection: 'row',
     alignItems: 'center',
     height: 44,
+
+    borderBottomWidth: 1,
+    borderColor: colors.border_gray,
   },
   text: {
     flex: 1,
@@ -34,13 +39,13 @@ const styles = StyleSheet.create({
   },
   iconLeft: {
     position: 'absolute',
-    left: 0,
+    left: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },
   iconRight: {
     position: 'absolute',
-    right: 0,
+    right: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -8,6 +8,7 @@ export default function InputField({
   isShowButton,
   onChangeText,
   showPassword,
+  IconComponent,
   outerStyles,
 }) {
   const [isFocused, setIsFocused] = useState(false);
@@ -37,9 +38,13 @@ export default function InputField({
       />
       {isShowButton && (
         <Pressable style={styles.button} onPress={showPassword}>
-          <Text style={styles.textShowPassword}>
-            {isPasswordVisible ? 'Показати' : 'Приховати'}
-          </Text>
+          {IconComponent ? (
+            <IconComponent />
+          ) : (
+            <Text style={styles.textShowPassword}>
+              {isPasswordVisible ? 'Показати' : 'Приховати'}
+            </Text>
+          )}
         </Pressable>
       )}
     </View>

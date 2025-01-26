@@ -2,9 +2,9 @@ import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
 import { colors } from '../../styles/global';
 
-export default function MainButton({ textButton, data, outer, textOuter }) {
+export default function MainButton({ textButton, onPress, outer, textOuter }) {
   return (
-    <Pressable style={[styles.button, outer]} onPress={data}>
+    <Pressable style={[styles.button, outer]} onPress={onPress}>
       <Text style={[styles.textButton, textOuter]}>{textButton}</Text>
     </Pressable>
   );

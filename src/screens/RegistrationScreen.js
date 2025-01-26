@@ -13,7 +13,7 @@ import AvatarPlace from '../../src/components/AvatarPlace';
 import bgImage from '../../assets/images/Photo BG.png';
 import { colors } from '../../styles/global';
 
-export default function RegistrationScreen() {
+export default function RegistrationScreen({ route, navigation }) {
   const [formData, setFormdata] = useState({
     login: '',
     email: '',
@@ -26,15 +26,23 @@ export default function RegistrationScreen() {
     setIsPasswordVisible(prevState => !prevState);
   };
 
-  const consolData = () => {
-    console.log(formData);
-  };
-
   const handleInputChange = (value, inputName) => {
     setFormdata(prevState => ({
       ...prevState,
       [inputName]: value,
     }));
+  };
+  const onLogin = () => {
+    navigation.navigate('Login', {
+      email: formData.email,
+      password: formData.password,
+    });
+  };
+  const onHome = () => {
+    navigation.navigate('Home', {
+      email: formData.email,
+      password: formData.password,
+    });
   };
 
   return (
@@ -68,8 +76,13 @@ export default function RegistrationScreen() {
                 showPassword={showPassword}
               />
             </View>
-            <MainButton textButton='Зареєструватися' data={consolData} />
-            <Text style={styles.smallText}>Вже є аккаунт? Увійти</Text>
+            <MainButton textButton='Зареєструватися' onPress={onHome} />
+            <Text style={styles.smallText}>
+              Вже є аккаунт?
+              <TouchableWithoutFeedback onPress={onLogin}>
+                <Text style={styles.signUpText}> Увійти</Text>
+              </TouchableWithoutFeedback>
+            </Text>
           </View>
         </ImageBackground>
       </View>
@@ -92,6 +105,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: 549,
+    paddingLeft: 16,
+    paddingRight: 16,
     backgroundColor: 'white',
 
     borderTopLeftRadius: 25,

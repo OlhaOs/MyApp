@@ -8,32 +8,41 @@ import FooterGrid from '../../assets/icons/FooterGrid';
 import User from '../../assets/icons/User';
 import PlusInCircle from '../../assets/icons/PlusInCircle';
 import Header from '../components/Header';
+import Avatar from '../components/Avatar';
 
-export default function PostsScreen() {
+export default function PostsScreen({ route, navigation }) {
+  const onLogin = () => {
+    navigation.navigate('Login');
+  };
   return (
-    <View style={styles.container}>
-      <Header icon={<LogOut />} text='Публікації' iconPosition='right' />
-      <View style={styles.publicationContainer}>
-        <View style={styles.avatar}>
-          <Image source={userFoto} />
+    <>
+      <Header
+        icon={<LogOut onPress={onLogin} />}
+        text='Публікації'
+        iconPosition='right'
+      />
+      <View style={styles.container}>
+        <View style={styles.publicationContainer}>
+          <Avatar width={60} height={60} userFoto={userFoto} />
+
+          <View style={styles.UserDataContainer}>
+            <Text style={styles.UserName}>Natali Romanova</Text>
+            <Text style={styles.UserEmail}>email@example.com</Text>
+          </View>
         </View>
-        <View style={styles.UserDataContainer}>
-          <Text style={styles.UserName}>Natali Romanova</Text>
-          <Text style={styles.UserEmail}>email@example.com</Text>
+        <View style={styles.footerContainer}>
+          <FooterGrid />
+          <View style={styles.iconContaner}>
+            <PlusInCircle
+              fill={colors.orange}
+              stroke='none'
+              plusColor={colors.white}
+            />
+          </View>
+          <User />
         </View>
       </View>
-      <View style={styles.footerContainer}>
-        <FooterGrid />
-        <View style={styles.iconContaner}>
-          <PlusInCircle
-            fill={colors.orange}
-            stroke='none'
-            plusColor={colors.white}
-          />
-        </View>
-        <User />
-      </View>
-    </View>
+    </>
   );
 }
 
@@ -56,12 +65,7 @@ const styles = StyleSheet.create({
     gap: 8,
     alignItems: 'flex-start',
   },
-  avatar: {
-    width: 60,
-    height: 60,
 
-    borderRadius: 16,
-  },
   UserName: {
     fontFamily: 'Roboto-Bold',
     fontSize: 13,

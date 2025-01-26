@@ -9,42 +9,19 @@ import {
 } from 'react-native';
 import InputField from '../../src/components/InputField';
 import MainButton from '../../src/components/MainButton';
+import AvatarPlace from '../../src/components/AvatarPlace';
 import bgImage from '../../assets/images/Photo BG.png';
 import { colors } from '../../styles/global';
 
-export default function LoginScreenScreen({ route, navigation }) {
-  const [formData, setFormdata] = useState({
-    email: '',
-    password: '',
-  });
+export default function ProfileScreen({ route, navigation }) {
 
-  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+<Header
+        icon={<LogOut onPress={onLogin} />}
+        text='Публікації'
+        iconPosition='right'
+      />
 
-  const showPassword = () => {
-    setIsPasswordVisible(prevState => !prevState);
-  };
-
-  const handleInputChange = (value, inputName) => {
-    setFormdata(prevState => ({
-      ...prevState,
-      [inputName]: value,
-    }));
-  };
-
-  const onSignUp = () => {
-    navigation.navigate('SignUp', {
-      email: formData.email,
-      password: formData.password,
-    });
-  };
-
-  const onHome = () => {
-    navigation.navigate('Home', {
-      email: formData.email,
-      password: formData.password,
-    });
-  };
-
+ 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.wrapper}>
@@ -54,8 +31,14 @@ export default function LoginScreenScreen({ route, navigation }) {
           style={styles.image}
         >
           <View style={styles.containerForm}>
-            <Text style={styles.titleText}>Увійти</Text>
+            <Text style={styles.titleText}>Реєстрація</Text>
+            <AvatarPlace />
             <View style={styles.containerInput}>
+              <InputField
+                onChangeText={value => handleInputChange(value, 'login')}
+                placeholder='Логін'
+                value={formData.login}
+              />
               <InputField
                 placeholder='Адреса електронної пошти'
                 onChangeText={value => handleInputChange(value, 'email')}
@@ -70,11 +53,11 @@ export default function LoginScreenScreen({ route, navigation }) {
                 showPassword={showPassword}
               />
             </View>
-            <MainButton textButton='Увійти' onPress={onHome} />
+            <MainButton textButton='Зареєструватися' onPress={onHome} />
             <Text style={styles.smallText}>
-              Немає акаунту?
-              <TouchableWithoutFeedback onPress={onSignUp}>
-                <Text style={styles.signUpText}> Зареєструватися</Text>
+              Вже є аккаунт?
+              <TouchableWithoutFeedback onPress={onLogin}>
+                <Text style={styles.signUpText}> Увійти</Text>
               </TouchableWithoutFeedback>
             </Text>
           </View>
@@ -98,11 +81,10 @@ const styles = StyleSheet.create({
     position: 'relative',
     alignItems: 'center',
     width: '100%',
-    height: 489,
+    height: 549,
     paddingLeft: 16,
     paddingRight: 16,
-
-    backgroundColor: colors.white,
+    backgroundColor: 'white',
 
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -114,7 +96,7 @@ const styles = StyleSheet.create({
   },
 
   titleText: {
-    marginTop: 32,
+    marginTop: 92,
     marginBottom: 32,
     fontFamily: 'Roboto-Medium',
     fontSize: 30,
