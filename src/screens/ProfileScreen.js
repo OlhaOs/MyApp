@@ -19,8 +19,8 @@ import Comment from '../../assets/icons/Comment';
 import Like from '../../assets/icons/Like';
 import Location from '../../assets/icons/Location';
 import LogOut from '../../assets/icons/LogOut';
-import UserFoto from '../../assets/images/avatar.jpg';
-import iconPlus from '../../assets/icons/PlusInCircle';
+import IconPlus from '../../assets/icons/PlusInCircle';
+import avatar from '../../assets/images/avatar.jpg';
 
 export default function ProfileScreen({ route, navigation }) {
   const onLogin = () => {
@@ -36,8 +36,20 @@ export default function ProfileScreen({ route, navigation }) {
     >
       <ImageBackground source={bgImage} resizeMode='cover' style={styles.image}>
         <View style={styles.containerProfile}>
-          <AvatarPlace icon={iconPlus} outer={styles.iconPlus} />
-          <Image source={UserFoto} style={styles.userFoto} />
+          <AvatarPlace
+            icon={
+              <IconPlus
+                style={{
+                  transform: [{ rotate: '45deg' }],
+                }}
+                fill={colors.white}
+                stroke={colors.text_gray}
+                plusColor={'yellow'}
+              />
+            }
+            isAvatar={avatar}
+          />
+
           <View style={styles.iconLogOut}>
             <LogOut onPress={onLogin} />
           </View>
@@ -144,6 +156,7 @@ const styles = StyleSheet.create({
   userFoto: {
     width: 120,
     height: 120,
+
     backgroundColor: colors.light_gray,
     borderRadius: 16,
 

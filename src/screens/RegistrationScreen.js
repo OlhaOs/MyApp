@@ -12,7 +12,7 @@ import MainButton from '../../src/components/MainButton';
 import AvatarPlace from '../../src/components/AvatarPlace';
 import bgImage from '../../assets/images/Photo BG.png';
 import { colors } from '../../styles/global';
-import iconPlus from '../../assets/images/Plus.png';
+import ІconPlus from '../../assets/icons/PlusInCircle';
 
 export default function RegistrationScreen({ route, navigation }) {
   const [formData, setFormdata] = useState({
@@ -56,7 +56,7 @@ export default function RegistrationScreen({ route, navigation }) {
         >
           <View style={styles.containerForm}>
             <Text style={styles.titleText}>Реєстрація</Text>
-            <AvatarPlace icon={iconPlus} />
+            <AvatarPlace icon={<ІconPlus />} />
             <View style={styles.containerInput}>
               <InputField
                 onChangeText={value => handleInputChange(value, 'login')}

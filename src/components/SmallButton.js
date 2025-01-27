@@ -1,15 +1,15 @@
 import React from 'react';
-import { Pressable, StyleSheet, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { colors } from '../../styles/global';
 
-export default function SmallButton({ icon, outer }) {
+export default function SmallButton({ icon }) {
   return (
-    <Pressable
+    <TouchableOpacity
       style={styles.button}
       onPress={() => console.log('press on avatar btn')}
     >
-      <Image style={[styles.iconButton, outer]} source={icon} />
-    </Pressable>
+      {icon}
+    </TouchableOpacity>
   );
 }
 

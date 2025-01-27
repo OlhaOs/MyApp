@@ -1,4 +1,3 @@
-import react from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { colors } from '../../styles/global';
 
