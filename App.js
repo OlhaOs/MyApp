@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import AuthNavigator from './src/navigation/AuthNavigation';
-import BottomTabNavigator from './src/navigation/BottomTabNavigator';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -20,7 +19,6 @@ export default function App() {
   return (
     <NavigationContainer>
       <AuthNavigator />
-      {/* {isLoggedIn ? <BottomTabNavigator /> : <AuthNavigator />} */}
       <StatusBar style='auto' backgroundColor='white' />
     </NavigationContainer>
   );

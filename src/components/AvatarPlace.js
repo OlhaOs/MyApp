@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import SmallButton from './SmallButton';
-import iconPlus from '../../assets/images/Plus.png';
+
 import { colors } from '../../styles/global';
 
-export default function AvatarPlace() {
+export default function AvatarPlace({icon, outer}) {
   return (
     <View style={styles.containerAvatar}>
-      <SmallButton icon={iconPlus} />
+      <SmallButton icon={icon} outer={outer}/>
     </View>
   );
 }

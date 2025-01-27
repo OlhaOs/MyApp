@@ -2,13 +2,13 @@ import React from 'react';
 import { Pressable, StyleSheet, Image } from 'react-native';
 import { colors } from '../../styles/global';
 
-export default function SmallButton({ icon }) {
+export default function SmallButton({ icon, outer }) {
   return (
     <Pressable
       style={styles.button}
       onPress={() => console.log('press on avatar btn')}
     >
-      <Image style={styles.iconButton} source={icon} />
+      <Image style={[styles.iconButton, outer]} source={icon} />
     </Pressable>
   );
 }

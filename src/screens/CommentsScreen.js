@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import { colors } from '../../styles/global';
-import GoBack from '../../assets/icons/GoBack';
-import Header from '../components/Header';
 import imgPublication from '../../assets/images/Content Block.jpg';
 import Avatar from '../components/Avatar';
 import InputField from '../components/InputField';
@@ -11,7 +9,6 @@ import Arrow from '../../assets/icons/Arrow';
 export default function CommentsScreen() {
   return (
     <>
-      <Header icon={<GoBack />} text='Коментарі' iconPosition='left' />
       <ScrollView
         style={styles.wrapper}
         contentContainerStyle={styles.contentContainer}
@@ -82,6 +79,9 @@ export default function CommentsScreen() {
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: colors.white,
+  },
   container: {
     marginTop: 32,
     paddingBottom: 32,

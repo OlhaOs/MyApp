@@ -1,45 +1,35 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-
 import Camera from '../../assets/icons/Camera';
-import GoBack from '../../assets/icons/GoBack';
 import Cart from '../../assets/icons/Cart';
 import Location from '../../assets/icons/Location';
 import { colors } from '../../styles/global';
 import InputField from '../components/InputField';
 import MainButton from '../components/MainButton';
-import Header from '../components/Header';
-// import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import HomeIndicator from '../components/HomeIndicator';
 
 export default function CreatePostsScreen() {
   return (
-    <>
-      <Header
-        text='Створити публікацію'
-        icon={<GoBack />}
-        iconPosition='left'
-      />
-
-      <View style={styles.container}>
-        <View style={styles.publicationContainer}>
-          <View style={styles.imageContainer}>
-            <View style={styles.cameraIconContainer}>
-              <Camera />
-            </View>
+    <View style={styles.container}>
+      <View style={styles.publicationContainer}>
+        <View style={styles.imageContainer}>
+          <View style={styles.cameraIconContainer}>
+            <Camera />
           </View>
-          <Text style={styles.textSecondary}>Завантажте фото</Text>
-          <View style={styles.inputWrap}>
-            <View style={styles.inputContainer}>
-              <InputField outerStyles={styles.input} placeholder={'Назва...'} />
-            </View>
-            <View style={styles.inputContainer}>
-              <Location style={styles.iconLocation} />
-              <InputField
-                outerStyles={styles.input}
-                placeholder={'Місцевість...'}
-              />
+        </View>
+        <Text style={styles.textSecondary}>Завантажте фото</Text>
+        <View style={styles.inputWrap}>
+          <View style={styles.inputContainer}>
+            <InputField outerStyles={styles.input} placeholder={'Назва...'} />
+          </View>
+          <View style={styles.inputContainer}>
+            <Location style={styles.iconLocation} />
+            <InputField
+              outerStyles={styles.input}
+              placeholder={'Місцевість...'}
+            />
 
-              {/* <GooglePlacesAutocomplete
+            {/* <GooglePlacesAutocomplete
             placeholder='Місцевість...'
             minLength={4}
             enablePoweredByContainer={false}
@@ -80,21 +70,21 @@ export default function CreatePostsScreen() {
               },
             }}
           /> */}
-            </View>
-          </View>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <MainButton
-            textButton={'Опублікувати'}
-            outer={styles.outerButtton}
-            textOuter={styles.textButton}
-          />
-          <View style={styles.CartIconContainer}>
-            <Cart />
           </View>
         </View>
       </View>
-    </>
+      <View style={styles.buttonsContainer}>
+        <MainButton
+          textButton={'Опублікувати'}
+          outer={styles.outerButtton}
+          textOuter={styles.textButton}
+        />
+        <View style={styles.CartIconContainer}>
+          <Cart />
+        </View>
+      </View>
+      <HomeIndicator />
+    </View>
   );
 }
 

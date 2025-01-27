@@ -10,6 +10,7 @@ const Plus = props => (
   >
     <Path
       stroke={props.stroke || 'rgba(33, 33, 33, 0.8)'}
+      strokeWidth={0.7}
       fill='none'
       d='M7.5.5h-1v6h-6v1h6v6h1v-6h6v-1h-6v-6Z'
     />

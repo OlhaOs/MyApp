@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 
 import AvatarPlace from '../../src/components/AvatarPlace';
@@ -18,8 +19,16 @@ import Comment from '../../assets/icons/Comment';
 import Like from '../../assets/icons/Like';
 import Location from '../../assets/icons/Location';
 import LogOut from '../../assets/icons/LogOut';
+import UserFoto from '../../assets/images/avatar.jpg';
+import iconPlus from '../../assets/icons/PlusInCircle';
 
 export default function ProfileScreen({ route, navigation }) {
+  const onLogin = () => {
+    navigation.navigate('Login');
+  };
+  const onComment = () => {
+    navigation.navigate('Comment');
+  };
   return (
     <ScrollView
       style={styles.wrapper}
@@ -27,9 +36,10 @@ export default function ProfileScreen({ route, navigation }) {
     >
       <ImageBackground source={bgImage} resizeMode='cover' style={styles.image}>
         <View style={styles.containerProfile}>
-          <AvatarPlace />
+          <AvatarPlace icon={iconPlus} outer={styles.iconPlus} />
+          <Image source={UserFoto} style={styles.userFoto} />
           <View style={styles.iconLogOut}>
-            <LogOut />
+            <LogOut onPress={onLogin} />
           </View>
           <Text style={styles.titleText}>Natali Romanova</Text>
           <View style={styles.cardContainer}>
@@ -40,7 +50,9 @@ export default function ProfileScreen({ route, navigation }) {
             <View style={styles.detailsContainer}>
               <View style={styles.details}>
                 <View style={styles.comment}>
-                  <Comment />
+                  <TouchableOpacity onPress={onComment}>
+                    <Comment />
+                  </TouchableOpacity>
                   <Text>8</Text>
                 </View>
                 <View style={styles.comment}>
@@ -63,7 +75,9 @@ export default function ProfileScreen({ route, navigation }) {
             <View style={styles.detailsContainer}>
               <View style={styles.details}>
                 <View style={styles.comment}>
-                  <Comment />
+                  <TouchableOpacity onPress={onComment}>
+                    <Comment />
+                  </TouchableOpacity>
                   <Text>3</Text>
                 </View>
                 <View style={styles.comment}>
@@ -86,7 +100,9 @@ export default function ProfileScreen({ route, navigation }) {
             <View style={styles.detailsContainer}>
               <View style={styles.details}>
                 <View style={styles.comment}>
-                  <Comment />
+                  <TouchableOpacity onPress={onComment}>
+                    <Comment />
+                  </TouchableOpacity>
                   <Text>50</Text>
                 </View>
                 <View style={styles.comment}>
@@ -125,7 +141,17 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
+  userFoto: {
+    width: 120,
+    height: 120,
+    backgroundColor: colors.light_gray,
+    borderRadius: 16,
 
+    position: 'absolute',
+    top: -60,
+    left: '50%',
+    transform: [{ translateX: -60 + 16 }],
+  },
   titleText: {
     marginTop: 46,
     fontFamily: 'Roboto-Medium',
@@ -165,5 +191,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+  },
+  iconPlus: {
+    fill: colors.white,
   },
 });
