@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { colors } from '../../styles/global';
 import userFoto from '../../assets/images/avatar.jpg';
 import Avatar from '../components/Avatar';
@@ -9,62 +16,92 @@ import img1 from '../../assets/images/Content Block 2.jpg';
 import img2 from '../../assets/images/Content Block.jpg';
 
 export default function PostsScreen({ route, navigation }) {
+  const params = route?.params;
+  console.log('first', params);
+
+  const { titlePhoto, locationName, photoUri } = params?.postData || {};
+
   const onComment = () => {
     navigation.navigate('Comment');
   };
   return (
-    <View style={styles.container}>
-      <View style={styles.publicationContainer}>
-        <Avatar width={60} height={60} userFoto={userFoto} />
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.publicationContainer}>
+          <Avatar width={60} height={60} userFoto={userFoto} />
 
-        <View style={styles.UserDataContainer}>
-          <Text style={styles.UserName}>Natali Romanova</Text>
-          <Text style={styles.UserEmail}>email@example.com</Text>
+          <View style={styles.UserDataContainer}>
+            <Text style={styles.UserName}>Natali Romanova</Text>
+            <Text style={styles.UserEmail}>email@example.com</Text>
+          </View>
         </View>
-      </View>
-      <View style={styles.cardContainer}>
-        <View style={styles.imageContainer}>
-          <Image source={img1} style={styles.image}></Image>
-        </View>
-        <Text style={styles.smallText}>Ліс</Text>
-        <View style={styles.detailsContainer}>
-          <View style={styles.details}>
+        {params && (
+          <View style={styles.cardContainer}>
+            <View style={styles.imageContainer}>
+              <Image source={{ uri: photoUri }} style={styles.image} />
+            </View>
+            <Text style={styles.smallText}>{titlePhoto}</Text>
+            <View style={styles.detailsContainer}>
+              <View style={styles.details}>
+                <View style={styles.comment}>
+                  <TouchableOpacity onPress={onComment}>
+                    <Comment fill='none' stroke={colors.border_gray} />
+                  </TouchableOpacity>
+                  <Text>0</Text>
+                </View>
+              </View>
+
+              <View style={styles.comment}>
+                <Location />
+                <Text style={styles.textLocation}>{locationName}</Text>
+              </View>
+            </View>
+          </View>
+        )}
+        <View style={styles.cardContainer}>
+          <View style={styles.imageContainer}>
+            <Image source={img1} style={styles.image}></Image>
+          </View>
+          <Text style={styles.smallText}>Ліс</Text>
+          <View style={styles.detailsContainer}>
+            <View style={styles.details}>
+              <View style={styles.comment}>
+                <TouchableOpacity onPress={onComment}>
+                  <Comment fill='none' stroke={colors.border_gray} />
+                </TouchableOpacity>
+                <Text>0</Text>
+              </View>
+            </View>
+
             <View style={styles.comment}>
-              <TouchableOpacity onPress={onComment}>
+              <Location />
+              <Text style={styles.textLocation}>
+                Ivano-Frankivs'k Region, Ukraine
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.cardContainer}>
+          <View style={styles.imageContainer}>
+            <Image source={img2} style={styles.image}></Image>
+          </View>
+          <Text style={styles.smallText}>Захід на Чорному морі</Text>
+          <View style={styles.detailsContainer}>
+            <View style={styles.details}>
+              <View style={styles.comment}>
                 <Comment fill='none' stroke={colors.border_gray} />
-              </TouchableOpacity>
-              <Text>0</Text>
+                <Text>0</Text>
+              </View>
             </View>
-          </View>
 
-          <View style={styles.comment}>
-            <Location />
-            <Text style={styles.textLocation}>
-              Ivano-Frankivs'k Region, Ukraine
-            </Text>
-          </View>
-        </View>
-      </View>
-      <View style={styles.cardContainer}>
-        <View style={styles.imageContainer}>
-          <Image source={img2} style={styles.image}></Image>
-        </View>
-        <Text style={styles.smallText}>Захід на Чорному морі</Text>
-        <View style={styles.detailsContainer}>
-          <View style={styles.details}>
             <View style={styles.comment}>
-              <Comment fill='none' stroke={colors.border_gray} />
-              <Text>0</Text>
+              <Location />
+              <Text>Ukraine</Text>
             </View>
-          </View>
-
-          <View style={styles.comment}>
-            <Location />
-            <Text>Ukraine</Text>
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -104,7 +141,11 @@ const styles = StyleSheet.create({
   imageContainer: {
     height: 240,
   },
-  image: { width: '100%', borderRadius: 8 },
+  image: {
+    width: '100%',
+    height: 240,
+    borderRadius: 8,
+  },
   commentContainer: {
     gap: 16,
   },

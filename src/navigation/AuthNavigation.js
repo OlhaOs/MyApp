@@ -6,6 +6,7 @@ import CommentsScreen from '../screens/CommentsScreen';
 import BottomTabNavigator from './BottomTabNavigator';
 import { TouchableOpacity } from 'react-native';
 import GoBack from '../../assets/icons/GoBack';
+import PostsScreen from '../screens/PostsScreen';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,7 @@ const AuthNavigator = () => {
       <Stack.Screen name='Home' component={BottomTabNavigator} />
       <Stack.Screen name='Login' component={LoginScreen} />
       <Stack.Screen name='SignUp' component={RegistrationScreen} />
+
       <Stack.Screen
         name='Comment'
         component={CommentsScreen}

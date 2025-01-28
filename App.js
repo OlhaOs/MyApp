@@ -19,7 +19,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <AuthNavigator />
-      <StatusBar style='auto' backgroundColor='white' />
+      <StatusBar style='auto' backgroundColor='transparent' />
     </NavigationContainer>
   );
 }

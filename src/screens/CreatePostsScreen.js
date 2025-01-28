@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
+  Button,
+  TouchableOpacity,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Alert,
 } from 'react-native';
 import Camera from '../../assets/icons/Camera';
 import Cart from '../../assets/icons/Cart';
@@ -13,91 +20,181 @@ import { colors } from '../../styles/global';
 import InputField from '../components/InputField';
 import MainButton from '../components/MainButton';
 import HomeIndicator from '../components/HomeIndicator';
+import ToggleCamera from '../../assets/icons/ToggleCamera';
 
-export default function CreatePostsScreen() {
-  return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import * as MediaLibrary from 'expo-media-library';
+
+export default function CreatePostsScreen({ route, navigation }) {
+  const [postData, setPostData] = useState({
+    titlePhoto: '',
+    locationName: '',
+    photoUri: null,
+  });
+  const [facing, setFacing] = useState('back');
+  const [permission, requestPermission] = useCameraPermissions();
+  const [libraryPermission, requestLibraryPermission] =
+    MediaLibrary.usePermissions();
+  const camera = useRef();
+
+  if (!permission) {
+    return <View />;
+  }
+  if (!permission.granted) {
+    return (
       <View style={styles.container}>
-        <View style={styles.publicationContainer}>
-          <View style={styles.imageContainer}>
-            <View style={styles.cameraIconContainer}>
-              <Camera />
-            </View>
-          </View>
-          <Text style={styles.textSecondary}>Завантажте фото</Text>
-          <View style={styles.inputWrap}>
-            <View style={styles.inputContainer}>
-              <InputField outerStyles={styles.input} placeholder={'Назва...'} />
-            </View>
-            <View style={styles.inputContainer}>
-              <Location style={styles.iconLocation} />
-              <InputField
-                outerStyles={styles.input}
-                placeholder={'Місцевість...'}
-              />
-
-              {/* <GooglePlacesAutocomplete
-            placeholder='Місцевість...'
-            minLength={4}
-            enablePoweredByContainer={false}
-            fetchDetails
-            onPress={(data, details = null) => {
-              // 'details' is provided when fetchDetails = true
-              // console.log(data, details);
-              setAddress(data.description);
-            }}
-            query={{ key: PLACES_KEY }}
-            styles={{
-              container: {
-                flex: 1,
-              },
-              textInputContainer: {
-                flexDirection: 'row',
-                paddingHorizontal: 8,
-              },
-              textInput: {
-                paddingVertical: 5,
-                paddingHorizontal: 10,
-                fontSize: 15,
-                flex: 1,
-                borderBottomWidth: 1,
-                borderColor: colors.border_gray,
-              },
-              row: {
-                backgroundColor: '#FFFFFF',
-                padding: 13,
-                height: 44,
-                flexDirection: 'row',
-              },
-              predefinedPlacesDescription: {
-                color: '#1faadb',
-              },
-              listView: {
-                maxHeight: 160,
-              },
-            }}
-          /> */}
-            </View>
-          </View>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <MainButton
-            textButton={'Опублікувати'}
-            outer={styles.outerButtton}
-            textOuter={styles.textButton}
-          />
-          <View style={styles.CartIconContainer}>
-            <Cart />
-          </View>
-        </View>
-        <HomeIndicator />
+        <Text style={styles.message}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title='grant permission' />
       </View>
-    </TouchableWithoutFeedback>
+    );
+  }
+
+  function toggleCameraFacing() {
+    setFacing(current => (current === 'back' ? 'front' : 'back'));
+  }
+
+  const takePhoto = async () => {
+    if (!camera) return;
+
+    if (!libraryPermission.granted) {
+      requestLibraryPermission();
+    }
+
+    const image = await camera?.current?.takePictureAsync();
+    setPostData(prevState => ({
+      ...prevState,
+      photoUri: image.uri,
+    }));
+    await MediaLibrary.saveToLibraryAsync(image.uri);
+  };
+
+  const editPhoto = () => {
+    setPostData(prevState => ({
+      ...prevState,
+      photoUri: null,
+    }));
+  };
+
+  const onPosts = () => {
+    if (!isFormComplete) {
+      return;
+    }
+    navigation.navigate('Posts', { postData });
+    onClearData();
+  };
+
+  const handleInputChange = (value, field) => {
+    setPostData(prevState => ({
+      ...prevState,
+      [field]: value,
+    }));
+  };
+
+  const onClearData = () => {
+    setPostData({
+      titlePhoto: '',
+      locationName: '',
+      photoUri: null,
+    });
+  };
+
+  const isFormComplete = photoUri && titlePhoto && locationName;
+  
+  const { titlePhoto, locationName, photoUri } = postData;
+
+  return (
+    <ScrollView
+      style={styles.wrapper}
+      contentContainerStyle={styles.contentContainer}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <View style={styles.publicationContainer}>
+            <View style={styles.cameraContainer}>
+              {photoUri ? (
+                <TouchableWithoutFeedback>
+                  <View style={styles.imagePreview}>
+                    <Image source={{ uri: photoUri }} style={styles.image} />
+                  </View>
+                </TouchableWithoutFeedback>
+              ) : (
+                <CameraView ref={camera} style={styles.camera} facing={facing}>
+                  <TouchableOpacity
+                    style={styles.buttonFlipCamera}
+                    onPress={toggleCameraFacing}
+                  >
+                    <ToggleCamera />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.cameraIconContainer}
+                    onPress={takePhoto}
+                  >
+                    <Camera />
+                  </TouchableOpacity>
+                </CameraView>
+              )}
+            </View>
+            <TouchableOpacity onPress={editPhoto}>
+              <Text style={styles.textSecondary}>
+                {photoUri ? 'Редагувати фото' : 'Завантажте фото'}
+              </Text>
+            </TouchableOpacity>
+
+            <View style={styles.inputWrap}>
+              <View style={styles.inputContainer}>
+                <InputField
+                  outerStyles={styles.input}
+                  placeholder={'Назва...'}
+                  value={titlePhoto}
+                  onChangeText={value => handleInputChange(value, 'titlePhoto')}
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <Location style={styles.iconLocation} />
+                <InputField
+                  outerStyles={styles.input}
+                  placeholder={'Місцевість...'}
+                  value={locationName}
+                  onChangeText={value =>
+                    handleInputChange(value, 'locationName')
+                  }
+                />
+              </View>
+            </View>
+          </View>
+          <View style={styles.buttonsContainer}>
+            <MainButton
+              disabled={!isFormComplete}
+              onPress={onPosts}
+              textButton={'Опублікувати'}
+              outer={
+                isFormComplete ? styles.activeButtton : styles.outerButtton
+              }
+              textOuter={isFormComplete ? styles.textActive : styles.textButton}
+            />
+            <TouchableOpacity
+              onPress={onClearData}
+              style={styles.CartIconContainer}
+            >
+              <Cart />
+            </TouchableOpacity>
+          </View>
+          <HomeIndicator />
+        </View>
+      </TouchableWithoutFeedback>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  },
+  contentContainer: { flexGrow: 1 },
   container: {
+    flex: 1,
     paddingTop: 44,
     paddingBottom: 32,
     paddingLeft: 16,
@@ -107,29 +204,11 @@ const styles = StyleSheet.create({
     gap: 32,
     backgroundColor: colors.white,
   },
-
   publicationContainer: {
     width: '100%',
     gap: 8,
   },
-  imageContainer: {
-    height: 240,
-    alignItems: 'center',
-    justifyContent: 'center',
 
-    backgroundColor: colors.light_gray,
-    borderColor: colors.border_gray,
-    borderRadius: 8,
-  },
-  cameraIconContainer: {
-    width: 60,
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    backgroundColor: colors.white,
-    borderRadius: 100,
-  },
   textSecondary: {
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
@@ -162,8 +241,15 @@ const styles = StyleSheet.create({
     marginTop: 0,
     backgroundColor: colors.light_gray,
   },
+  activeButtton: {
+    marginTop: 0,
+    backgroundColor: colors.orange,
+  },
   textButton: {
     color: colors.text_gray,
+  },
+  textActive: {
+    color: colors.white,
   },
   buttonsContainer: {
     width: '100%',
@@ -178,5 +264,61 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light_gray,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  cameraContainer: {
+    width: '100%',
+    height: 240,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    backgroundColor: colors.light_gray,
+    borderColor: colors.border_gray,
+    borderRadius: 8,
+  },
+  camera: {
+    position: 'relative',
+    width: '100%',
+    height: 240,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    backgroundColor: colors.light_gray,
+    borderColor: colors.border_gray,
+  },
+
+  cameraIconContainer: {
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    backgroundColor: colors.white,
+    borderRadius: 100,
+  },
+  buttonFlipCamera: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    borderRadius: 100,
+    color: colors.orange,
+  },
+  imagePreview: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
 });

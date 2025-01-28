@@ -4,6 +4,7 @@ import { colors } from '../../styles/global';
 
 export default function InputField({
   placeholder,
+  value,
   isPasswordVisible,
   isShowButton,
   onChangeText,
@@ -30,6 +31,7 @@ export default function InputField({
       <TextInput
         onFocus={onFocus}
         onBlur={onBlur}
+        value={value}
         onChangeText={onChangeText}
         style={styles.input}
         placeholder={placeholder}
