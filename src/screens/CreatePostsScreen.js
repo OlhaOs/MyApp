@@ -8,10 +8,7 @@ import {
   Button,
   TouchableOpacity,
   Image,
-  KeyboardAvoidingView,
-  Platform,
   ScrollView,
-  Alert,
 } from 'react-native';
 import Camera from '../../assets/icons/Camera';
 import Cart from '../../assets/icons/Cart';
@@ -100,9 +97,8 @@ export default function CreatePostsScreen({ route, navigation }) {
     });
   };
 
-  const isFormComplete = photoUri && titlePhoto && locationName;
-  
   const { titlePhoto, locationName, photoUri } = postData;
+  const isFormComplete = photoUri && titlePhoto && locationName;
 
   return (
     <ScrollView

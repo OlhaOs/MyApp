@@ -1,12 +1,10 @@
 import { createStackNavigator } from '@react-navigation/stack';
-
 import LoginScreen from '../screens/LoginScreen';
 import RegistrationScreen from '../screens/RegistrationScreen';
 import CommentsScreen from '../screens/CommentsScreen';
 import BottomTabNavigator from './BottomTabNavigator';
 import { TouchableOpacity } from 'react-native';
 import GoBack from '../../assets/icons/GoBack';
-import PostsScreen from '../screens/PostsScreen';
 
 const Stack = createStackNavigator();
 

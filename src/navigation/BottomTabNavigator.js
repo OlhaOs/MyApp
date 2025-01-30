@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName='Posts'
+      initialRouteName='Profile'
       screenOptions={({ navigation }) => ({
         headerShown: true,
         headerTitleAlign: 'center',

@@ -17,7 +17,6 @@ import img2 from '../../assets/images/Content Block.jpg';
 
 export default function PostsScreen({ route, navigation }) {
   const params = route?.params;
-  console.log('first', params);
 
   const { titlePhoto, locationName, photoUri } = params?.postData || {};
 
