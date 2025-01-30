@@ -17,7 +17,7 @@ import img2 from '../../assets/images/Content Block.jpg';
 import img3 from '../../assets/images/Content Block 3.jpg';
 import Comment from '../../assets/icons/Comment';
 import Like from '../../assets/icons/Like';
-import Location from '../../assets/icons/Location';
+import LocationIcon from '../../assets/icons/LocationIcon';
 import LogOut from '../../assets/icons/LogOut';
 import IconPlus from '../../assets/icons/PlusInCircle';
 import avatar from '../../assets/images/avatar.jpg';
@@ -74,7 +74,7 @@ export default function ProfileScreen({ route, navigation }) {
               </View>
 
               <View style={styles.comment}>
-                <Location />
+                <LocationIcon />
                 <Text>Ukraine</Text>
               </View>
             </View>
@@ -99,7 +99,7 @@ export default function ProfileScreen({ route, navigation }) {
               </View>
 
               <View style={styles.comment}>
-                <Location />
+                <LocationIcon />
                 <Text>Ukraine</Text>
               </View>
             </View>
@@ -124,7 +124,7 @@ export default function ProfileScreen({ route, navigation }) {
               </View>
 
               <View style={styles.comment}>
-                <Location />
+                <LocationIcon />
                 <Text>Italy</Text>
               </View>
             </View>

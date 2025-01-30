@@ -1,38 +1,41 @@
-import React, { useRef, useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
+  Button,
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
-  Button,
   TouchableOpacity,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import * as MediaLibrary from 'expo-media-library';
+import * as Location from 'expo-location';
 import Camera from '../../assets/icons/Camera';
 import Cart from '../../assets/icons/Cart';
-import Location from '../../assets/icons/Location';
+import LocationIcon from '../../assets/icons/LocationIcon';
 import { colors } from '../../styles/global';
 import InputField from '../components/InputField';
 import MainButton from '../components/MainButton';
 import HomeIndicator from '../components/HomeIndicator';
 import ToggleCamera from '../../assets/icons/ToggleCamera';
 
-import { CameraView, useCameraPermissions } from 'expo-camera';
-import * as MediaLibrary from 'expo-media-library';
-
 export default function CreatePostsScreen({ route, navigation }) {
   const [postData, setPostData] = useState({
     titlePhoto: '',
     locationName: '',
     photoUri: null,
+    latitude: null,
+    longitude: null,
   });
   const [facing, setFacing] = useState('back');
   const [permission, requestPermission] = useCameraPermissions();
-  const [libraryPermission, requestLibraryPermission] =
-    MediaLibrary.usePermissions();
+  const [libraryPermission, requestLibraryPermission] = MediaLibrary.usePermissions();
   const camera = useRef();
+
 
   if (!permission) {
     return <View />;
@@ -43,14 +46,14 @@ export default function CreatePostsScreen({ route, navigation }) {
         <Text style={styles.message}>
           We need your permission to show the camera
         </Text>
-        <Button onPress={requestPermission} title='grant permission' />
+        <Button onPress={requestPermission} title="Grant permission" />
       </View>
     );
   }
 
-  function toggleCameraFacing() {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
-  }
+  const toggleCameraFacing = () => {
+    setFacing((current) => (current === 'back' ? 'front' : 'back'));
+  };
 
   const takePhoto = async () => {
     if (!camera) return;
@@ -60,7 +63,7 @@ export default function CreatePostsScreen({ route, navigation }) {
     }
 
     const image = await camera?.current?.takePictureAsync();
-    setPostData(prevState => ({
+    setPostData((prevState) => ({
       ...prevState,
       photoUri: image.uri,
     }));
@@ -68,22 +71,44 @@ export default function CreatePostsScreen({ route, navigation }) {
   };
 
   const editPhoto = () => {
-    setPostData(prevState => ({
+    setPostData((prevState) => ({
       ...prevState,
       photoUri: null,
     }));
   };
 
-  const onPosts = () => {
-    if (!isFormComplete) {
-      return;
+  const onPosts = async () => {
+    if (!isFormComplete) return;
+
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+
+      
+      setPostData(prevState => {
+        const updatedData = {
+          ...prevState,
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        };
+
+        navigation.navigate('Posts', { postData: updatedData });
+        return updatedData;
+      });
+
+      onClearData();
+    } catch (error) {
+      Alert.alert('Could not fetch location', error.message);
     }
-    navigation.navigate('Posts', { postData });
-    onClearData();
   };
 
   const handleInputChange = (value, field) => {
-    setPostData(prevState => ({
+    setPostData((prevState) => ({
       ...prevState,
       [field]: value,
     }));
@@ -94,6 +119,7 @@ export default function CreatePostsScreen({ route, navigation }) {
       titlePhoto: '',
       locationName: '',
       photoUri: null,
+
     });
   };
 
@@ -144,18 +170,59 @@ export default function CreatePostsScreen({ route, navigation }) {
                   outerStyles={styles.input}
                   placeholder={'Назва...'}
                   value={titlePhoto}
-                  onChangeText={value => handleInputChange(value, 'titlePhoto')}
+                  onChangeText={(value) => handleInputChange(value, 'titlePhoto')}
                 />
               </View>
+              {/* <GooglePlacesAutocomplete
+                placeholder="Місцевість..."
+                minLength={4}
+                enablePoweredByContainer={false}
+                fetchDetails
+                onPress={(data, details = null) => {
+                  // 'details' is provided when fetchDetails = true
+                  // console.log(data, details);
+                  setAddress(data.description);
+                }}
+                query={{ key: PLACES_KEY }}
+                styles={{
+                  container: {
+                    flex: 1,
+                  },
+                  textInputContainer: {
+                    flexDirection: 'row',
+                    paddingHorizontal: 8,
+                  },
+                  textInput: {
+                    paddingVertical: 5,
+                    paddingHorizontal: 10,
+                    fontSize: 15,
+                    flex: 1,
+                    borderBottomWidth: 1,
+                    borderColor: colors.border_gray
+                  },
+                  row: {
+                    backgroundColor: '#FFFFFF',
+                    padding: 13,
+                    height: 44,
+                    flexDirection: 'row',
+                  },
+                  predefinedPlacesDescription: {
+                    color: '#1faadb',
+                  },
+                  listView: {
+                    maxHeight: 160,
+                  }
+                }}
+              /> */}
+
+
               <View style={styles.inputContainer}>
-                <Location style={styles.iconLocation} />
+                <LocationIcon style={styles.iconLocation} />
                 <InputField
                   outerStyles={styles.input}
                   placeholder={'Місцевість...'}
                   value={locationName}
-                  onChangeText={value =>
-                    handleInputChange(value, 'locationName')
-                  }
+                  onChangeText={(value) => handleInputChange(value, 'locationName')}
                 />
               </View>
             </View>
@@ -165,15 +232,10 @@ export default function CreatePostsScreen({ route, navigation }) {
               disabled={!isFormComplete}
               onPress={onPosts}
               textButton={'Опублікувати'}
-              outer={
-                isFormComplete ? styles.activeButtton : styles.outerButtton
-              }
+              outer={isFormComplete ? styles.activeButtton : styles.outerButtton}
               textOuter={isFormComplete ? styles.textActive : styles.textButton}
             />
-            <TouchableOpacity
-              onPress={onClearData}
-              style={styles.CartIconContainer}
-            >
+            <TouchableOpacity onPress={onClearData} style={styles.CartIconContainer}>
               <Cart />
             </TouchableOpacity>
           </View>
@@ -204,7 +266,6 @@ const styles = StyleSheet.create({
     width: '100%',
     gap: 8,
   },
-
   textSecondary: {
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
@@ -226,9 +287,6 @@ const styles = StyleSheet.create({
     paddingRight: 0,
     backgroundColor: colors.white,
     borderWidth: 0,
-  },
-  inputIcon: {
-    borderBottomWidth: 0,
   },
   iconLocation: {
     marginLeft: 16,
@@ -261,13 +319,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   cameraContainer: {
     width: '100%',
     height: 240,
     alignItems: 'center',
     justifyContent: 'center',
-
     backgroundColor: colors.light_gray,
     borderColor: colors.border_gray,
     borderRadius: 8,
@@ -278,17 +334,14 @@ const styles = StyleSheet.create({
     height: 240,
     alignItems: 'center',
     justifyContent: 'center',
-
     backgroundColor: colors.light_gray,
     borderColor: colors.border_gray,
   },
-
   cameraIconContainer: {
     width: 60,
     height: 60,
     alignItems: 'center',
     justifyContent: 'center',
-
     backgroundColor: colors.white,
     borderRadius: 100,
   },
@@ -318,3 +371,4 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
 });
+

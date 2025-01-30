@@ -11,17 +11,23 @@ import { colors } from '../../styles/global';
 import userFoto from '../../assets/images/avatar.jpg';
 import Avatar from '../components/Avatar';
 import Comment from '../../assets/icons/Comment';
-import Location from '../../assets/icons/Location';
+import LocationIcon from '../../assets/icons/LocationIcon';
 import img1 from '../../assets/images/Content Block 2.jpg';
 import img2 from '../../assets/images/Content Block.jpg';
 
 export default function PostsScreen({ route, navigation }) {
   const params = route?.params;
+  console.log("param", params)
 
-  const { titlePhoto, locationName, photoUri } = params?.postData || {};
+  const { titlePhoto, locationName, photoUri, latitude, longitude } = params?.postData || {};
 
   const onComment = () => {
     navigation.navigate('Comment');
+  };
+
+  const onMap = () => {
+    navigation.navigate('Map', { latitude, longitude });
+
   };
   return (
     <ScrollView>
@@ -50,10 +56,10 @@ export default function PostsScreen({ route, navigation }) {
                 </View>
               </View>
 
-              <View style={styles.comment}>
-                <Location />
+              <TouchableOpacity onPress={onMap} style={styles.comment}>
+                <LocationIcon />
                 <Text style={styles.textLocation}>{locationName}</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -71,13 +77,11 @@ export default function PostsScreen({ route, navigation }) {
                 <Text>0</Text>
               </View>
             </View>
+            <TouchableOpacity onPress={onMap} style={styles.comment}>
+              <LocationIcon />
+              <Text style={styles.textLocation}> Ivano-Frankivs'k Region, Ukraine</Text>
+            </TouchableOpacity>
 
-            <View style={styles.comment}>
-              <Location />
-              <Text style={styles.textLocation}>
-                Ivano-Frankivs'k Region, Ukraine
-              </Text>
-            </View>
           </View>
         </View>
         <View style={styles.cardContainer}>
@@ -92,11 +96,11 @@ export default function PostsScreen({ route, navigation }) {
                 <Text>0</Text>
               </View>
             </View>
+            <TouchableOpacity onPress={onMap} style={styles.comment}>
+              <LocationIcon />
+              <Text style={styles.textLocation}> Ukraine</Text>
+            </TouchableOpacity>
 
-            <View style={styles.comment}>
-              <Location />
-              <Text>Ukraine</Text>
-            </View>
           </View>
         </View>
       </View>

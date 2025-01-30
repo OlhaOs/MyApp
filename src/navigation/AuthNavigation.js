@@ -5,6 +5,7 @@ import CommentsScreen from '../screens/CommentsScreen';
 import BottomTabNavigator from './BottomTabNavigator';
 import { TouchableOpacity } from 'react-native';
 import GoBack from '../../assets/icons/GoBack';
+import MapScreen from '../screens/MapScreen';
 
 const Stack = createStackNavigator();
 
@@ -42,7 +43,27 @@ const AuthNavigator = () => {
           ),
         })}
       />
+
+      <Stack.Screen
+        name='Map'
+        component={MapScreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+
+          title: 'Карта',
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{ marginLeft: 16 }}
+              onPress={() => navigation.goBack()}
+            >
+              <GoBack />
+            </TouchableOpacity>
+          ),
+        })}
+      />
     </Stack.Navigator>
+
+
   );
 };
 

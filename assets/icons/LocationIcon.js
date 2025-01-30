@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
-const Location = props => (
+const LocationIcon = props => (
   <Svg
     xmlns='http://www.w3.org/2000/svg'
     width={24}
@@ -24,4 +24,4 @@ const Location = props => (
     />
   </Svg>
 );
-export default Location;
+export default LocationIcon;
