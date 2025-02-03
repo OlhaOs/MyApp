@@ -13,6 +13,7 @@ import AvatarPlace from '../../src/components/AvatarPlace';
 import bgImage from '../../assets/images/Photo BG.png';
 import { colors } from '../../styles/global';
 import ІconPlus from '../../assets/icons/PlusInCircle';
+import { registerDB } from '../utils/auth';
 
 export default function RegistrationScreen({ route, navigation }) {
   const [formData, setFormdata] = useState({
@@ -41,11 +42,31 @@ export default function RegistrationScreen({ route, navigation }) {
   };
   const onHome = () => {
     navigation.navigate('Home', {
+      login: formData.login,
       email: formData.email,
       password: formData.password,
     });
   };
+  const validate = () => {
+    if (formData.email.length < 1 && formData.password < 1 && formData.login.length < 1) return false
 
+    return true;
+  }
+
+
+  const onSignUp = () => {
+    console.log('Sign up!');
+    const isValid = validate();
+
+    if (isValid) {
+      registerDB(formData.email, formData.password, formData.login);
+    } else {
+      Alert.alert('Помилка!', 'Заповніть всі поля!', [
+        { text: 'Зрозуміло!', onPress: () => { } },
+      ])
+    }
+    // onHome();
+  };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.wrapper}>
@@ -77,7 +98,7 @@ export default function RegistrationScreen({ route, navigation }) {
                 showPassword={showPassword}
               />
             </View>
-            <MainButton textButton='Зареєструватися' onPress={onHome} />
+            <MainButton textButton='Зареєструватися' onPress={onSignUp} />
             <Text style={styles.smallText}>
               Вже є аккаунт?
               <TouchableWithoutFeedback onPress={onLogin}>
