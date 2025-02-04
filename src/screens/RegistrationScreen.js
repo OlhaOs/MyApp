@@ -14,6 +14,7 @@ import bgImage from '../../assets/images/Photo BG.png';
 import { colors } from '../../styles/global';
 import ІconPlus from '../../assets/icons/PlusInCircle';
 import { registerDB } from '../utils/auth';
+import { useDispatch } from 'react-redux';
 
 export default function RegistrationScreen({ route, navigation }) {
   const [formData, setFormdata] = useState({
@@ -21,7 +22,7 @@ export default function RegistrationScreen({ route, navigation }) {
     email: '',
     password: '',
   });
-
+  const dispatch = useDispatch();
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
 
   const showPassword = () => {
@@ -35,37 +36,38 @@ export default function RegistrationScreen({ route, navigation }) {
     }));
   };
   const onLogin = () => {
-    navigation.navigate('Login', {
-      email: formData.email,
-      password: formData.password,
-    });
+    navigation.navigate('Login');
   };
-  const onHome = () => {
-    navigation.navigate('Home', {
-      login: formData.login,
-      email: formData.email,
-      password: formData.password,
-    });
-  };
+
   const validate = () => {
     if (formData.email.length < 1 && formData.password < 1 && formData.login.length < 1) return false
 
     return true;
   }
 
-
-  const onSignUp = () => {
-    console.log('Sign up!');
+  const onSignUp = async () => {
+ ;
     const isValid = validate();
 
-    if (isValid) {
-      registerDB(formData.email, formData.password, formData.login);
-    } else {
-      Alert.alert('Помилка!', 'Заповніть всі поля!', [
-        { text: 'Зрозуміло!', onPress: () => { } },
-      ])
+    if (!isValid) {
+      Alert.alert('Помилка!', 'Заповніть всі поля!', [{ text: 'Зрозуміло!' }]);
+      return;
     }
-    // onHome();
+
+    try {
+      const user = await registerDB(formData.email, formData.password, formData.login);
+      if (user) {
+        dispatch(setUserInfo({
+          uid: user.uid,
+          email: user.email,
+          displayName: formData.login,
+          profilePhoto: user.photoURL || "",
+        }));
+        navigation.navigate('Home');
+      }
+    } catch (error) {
+      Alert.alert('Помилка реєстрації', error.message, [{ text: 'OK' }]);
+    }
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

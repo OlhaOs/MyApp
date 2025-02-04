@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -22,6 +22,10 @@ import InputField from '../components/InputField';
 import MainButton from '../components/MainButton';
 import HomeIndicator from '../components/HomeIndicator';
 import ToggleCamera from '../../assets/icons/ToggleCamera';
+import { addPost, getPosts, uploadImage } from "../utils/firestore";
+import { useSelector } from "react-redux";
+
+import { nanoid } from '@reduxjs/toolkit';
 
 export default function CreatePostsScreen({ route, navigation }) {
   const [postData, setPostData] = useState({
@@ -35,7 +39,8 @@ export default function CreatePostsScreen({ route, navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
   const [libraryPermission, requestLibraryPermission] = MediaLibrary.usePermissions();
   const camera = useRef();
-
+  const user = useSelector((state) => state.user.userInfo);
+  const { titlePhoto, locationName, photoUri, latitude, longitude } = postData;
 
   if (!permission) {
     return <View />;
@@ -50,11 +55,9 @@ export default function CreatePostsScreen({ route, navigation }) {
       </View>
     );
   }
-
   const toggleCameraFacing = () => {
     setFacing((current) => (current === 'back' ? 'front' : 'back'));
   };
-
   const takePhoto = async () => {
     if (!camera) return;
 
@@ -67,18 +70,27 @@ export default function CreatePostsScreen({ route, navigation }) {
       ...prevState,
       photoUri: image.uri,
     }));
-    await MediaLibrary.saveToLibraryAsync(image.uri);
-  };
 
+  };
   const editPhoto = () => {
     setPostData((prevState) => ({
       ...prevState,
       photoUri: null,
     }));
   };
-
   const onPosts = async () => {
     if (!isFormComplete) return;
+
+    try {
+      const location = await getLocation();
+      if (!location) return;
+      onPublish(location.coords.latitude, location.coords.longitude);
+    } catch (error) {
+      console.error("Error getting location:", error);
+    }
+  };
+
+  const getLocation = async () => {
 
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -86,34 +98,18 @@ export default function CreatePostsScreen({ route, navigation }) {
         Alert.alert('Permission to access location was denied');
         return;
       }
-
-      let location = await Location.getCurrentPositionAsync({});
-
-      
-      setPostData(prevState => {
-        const updatedData = {
-          ...prevState,
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        };
-
-        navigation.navigate('Posts', { postData: updatedData });
-        return updatedData;
-      });
-
-      onClearData();
+      return await Location.getCurrentPositionAsync({});
     } catch (error) {
       Alert.alert('Could not fetch location', error.message);
     }
-  };
 
+  }
   const handleInputChange = (value, field) => {
     setPostData((prevState) => ({
       ...prevState,
       [field]: value,
     }));
   };
-
   const onClearData = () => {
     setPostData({
       titlePhoto: '',
@@ -122,8 +118,49 @@ export default function CreatePostsScreen({ route, navigation }) {
 
     });
   };
+  const uploadImageToStorage = async () => {
+    if (!photoUri) return;
 
-  const { titlePhoto, locationName, photoUri } = postData;
+    try {
+      const response = await fetch(photoUri);
+      const file = await response.blob();
+      const fileName = photoUri.split('/').pop(); // Отримуємо ім'я файлу з URI
+      const fileType = file.type; // Отримуємо тип файлу
+      const imageFile = new File([file], fileName, { type: fileType });
+
+      const uploadedImageUrl = await uploadImage(user.uid, imageFile, fileName);
+
+      return uploadedImageUrl;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }
+  const onPublish = async (latitude, longitude) => {
+    if (!user) return;
+
+    try {
+      const imageUrl = await uploadImageToStorage();
+      const postId = nanoid()
+
+      await addPost(user?.uid, {
+        locationName,
+        id: postId,
+        photoUri: imageUrl,
+        userId: user.uid,
+        titlePhoto,
+        latitude,
+        longitude,
+      });
+
+      Alert.alert('Пост успішно створено!');
+
+      navigation.navigate('Posts');
+      onClearData();
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const isFormComplete = photoUri && titlePhoto && locationName;
 
   return (
@@ -173,49 +210,6 @@ export default function CreatePostsScreen({ route, navigation }) {
                   onChangeText={(value) => handleInputChange(value, 'titlePhoto')}
                 />
               </View>
-              {/* <GooglePlacesAutocomplete
-                placeholder="Місцевість..."
-                minLength={4}
-                enablePoweredByContainer={false}
-                fetchDetails
-                onPress={(data, details = null) => {
-                  // 'details' is provided when fetchDetails = true
-                  // console.log(data, details);
-                  setAddress(data.description);
-                }}
-                query={{ key: PLACES_KEY }}
-                styles={{
-                  container: {
-                    flex: 1,
-                  },
-                  textInputContainer: {
-                    flexDirection: 'row',
-                    paddingHorizontal: 8,
-                  },
-                  textInput: {
-                    paddingVertical: 5,
-                    paddingHorizontal: 10,
-                    fontSize: 15,
-                    flex: 1,
-                    borderBottomWidth: 1,
-                    borderColor: colors.border_gray
-                  },
-                  row: {
-                    backgroundColor: '#FFFFFF',
-                    padding: 13,
-                    height: 44,
-                    flexDirection: 'row',
-                  },
-                  predefinedPlacesDescription: {
-                    color: '#1faadb',
-                  },
-                  listView: {
-                    maxHeight: 160,
-                  }
-                }}
-              /> */}
-
-
               <View style={styles.inputContainer}>
                 <LocationIcon style={styles.iconLocation} />
                 <InputField

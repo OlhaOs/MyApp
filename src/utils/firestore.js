@@ -14,7 +14,7 @@ export const addUser = async (userId, userData) => {
 
 export const addPost = async (userId, post) => {
     try {
-        await setDoc(doc(db, 'posts', userId), { userId, posts: [post] }, { merge: true });
+        await setDoc(doc(db, 'posts', userId), post, { merge: true });
         console.log('Post added:', userId);
     } catch (error) {
         console.error('Error adding post:', error);
@@ -30,10 +30,25 @@ export const getUser = async (userId) => {
         console.log('User data:', docSnap.data());
         return docSnap.data();
     } else {
-        console.log('No such document!');
+        console.log('No such document on users!');
         return null;
     }
 };
+
+export const getPosts = async (userId) => {
+
+    console.log("Fetching post for user:", userId);
+    const docRef = doc(db, 'posts', userId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        console.log('Post data:', docSnap.data());
+        return docSnap.data();
+    } else {
+        console.log('No such document on posts!');
+        return null;
+    }
+}
 
 // Функція для запису даних користувача у Firestore
 export const updateUserInFirestore = async (uid, data) => {
@@ -52,9 +67,8 @@ export const uploadImage = async (
     fileName,
 ) => {
     try {
-        const imageRef = ref(storage, `profilePhotos/${userId}/${fileName}`);
+        const imageRef = ref(storage, `postsPhotos/${userId}/${fileName}`);
         const result = await uploadBytes(imageRef, file);
-
         const imageUrl = await getImageUrl(imageRef);
         console.log('Upload result:', result);
         return imageUrl;

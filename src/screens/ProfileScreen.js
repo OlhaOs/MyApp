@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useDebugValue, useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -21,14 +21,49 @@ import LocationIcon from '../../assets/icons/LocationIcon';
 import LogOut from '../../assets/icons/LogOut';
 import IconPlus from '../../assets/icons/PlusInCircle';
 import avatar from '../../assets/images/avatar.jpg';
+import { logoutDB } from '../utils/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPosts } from '../utils/firestore';
 
-export default function ProfileScreen({ route, navigation }) {
-  const onLogin = () => {
-    navigation.navigate('Login');
-  };
+export default function ProfileScreen({ navigation }) {
+  const [postData, setPostData] = useState(null);
+  const user = useSelector(state => state.user.userInfo);
+
+  const dispatch = useDispatch();
+
   const onComment = () => {
     navigation.navigate('Comment');
   };
+  const onMap = () => {
+    navigation.navigate('Map', { latitude, longitude })
+  };
+
+
+  useEffect(() => {
+
+    const fetchPostData = async () => {
+      if (user?.uid) {
+        const post = await getPosts(user.uid);
+        setPostData(post);
+      }
+    };
+
+    fetchPostData();
+  }, [user?.uid]);
+
+  if (!postData) {
+    return (
+      <View style={styles.container}>
+        <Text>Завантаження...</Text>
+      </View>
+    );
+  }
+
+  const { name: displayName, email, photoURL } = user || {};
+
+  const { titlePhoto, locationName, photoUri, latitude, longitude } = postData;
+
+
   return (
     <ScrollView
       style={styles.wrapper}
@@ -51,9 +86,32 @@ export default function ProfileScreen({ route, navigation }) {
           />
 
           <View style={styles.iconLogOut}>
-            <LogOut onPress={onLogin} />
+            <LogOut onPress={() => logoutDB(dispatch)} />
           </View>
-          <Text style={styles.titleText}>Natali Romanova</Text>
+          <Text style={styles.titleText}>{displayName}</Text>
+          {postData && (
+            <View style={styles.cardContainer}>
+              <View style={styles.imageContainer}>
+                <Image source={{ uri: photoUri }} style={styles.image} />
+              </View>
+              <Text style={styles.smallText}>{titlePhoto}</Text>
+              <View style={styles.detailsContainer}>
+                <View style={styles.details}>
+                  <View style={styles.comment}>
+                    <TouchableOpacity onPress={onComment}>
+                      <Comment fill='none' stroke={colors.border_gray} />
+                    </TouchableOpacity>
+                    <Text>0</Text>
+                  </View>
+                </View>
+
+                <TouchableOpacity onPress={onMap} style={styles.comment}>
+                  <LocationIcon />
+                  <Text style={styles.textLocation}>{locationName}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
           <View style={styles.cardContainer}>
             <View style={styles.imageContainer}>
               <Image source={img1} style={styles.image}></Image>
@@ -188,7 +246,11 @@ const styles = StyleSheet.create({
   imageContainer: {
     height: 240,
   },
-  image: { width: '100%', borderRadius: 8 },
+  image: {
+    width: '100%',
+    height: 240,
+    borderRadius: 8
+  },
   commentContainer: {
     gap: 16,
   },

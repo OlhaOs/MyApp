@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,20 +14,46 @@ import Comment from '../../assets/icons/Comment';
 import LocationIcon from '../../assets/icons/LocationIcon';
 import img1 from '../../assets/images/Content Block 2.jpg';
 import img2 from '../../assets/images/Content Block.jpg';
+import { useSelector } from 'react-redux';
+import { getPosts } from '../utils/firestore';
 
-export default function PostsScreen({ route, navigation }) {
-  const params = route?.params;
-  console.log("param", params)
 
-  const { titlePhoto, locationName, photoUri, latitude, longitude } = params?.postData || {};
+export default function PostsScreen({ navigation }) {
+  const [postData, setPostData] = useState(null);
+  const user = useSelector(state => state.user.userInfo);
+
+  useEffect(() => {
+
+    const fetchPostData = async () => {
+      if (user?.uid) {
+         const post = await getPosts(user.uid);
+          setPostData(post);
+      }
+    };
+
+    fetchPostData();
+  }, [user?.uid]);
+
+  if (!postData) {
+    return (
+      <View style={styles.container}>
+        <Text>Завантаження...</Text>
+      </View>
+    );
+  }
+
+  const { name: displayName, email, photoURL } = user || {};
+
+  const { titlePhoto, locationName, photoUri, latitude, longitude } = postData;
 
   const onComment = () => {
     navigation.navigate('Comment');
+
+
   };
 
   const onMap = () => {
-    navigation.navigate('Map', { latitude, longitude });
-
+    navigation.navigate('Map', { latitude, longitude })
   };
   return (
     <ScrollView>
@@ -36,11 +62,11 @@ export default function PostsScreen({ route, navigation }) {
           <Avatar width={60} height={60} userFoto={userFoto} />
 
           <View style={styles.UserDataContainer}>
-            <Text style={styles.UserName}>Natali Romanova</Text>
-            <Text style={styles.UserEmail}>email@example.com</Text>
+            <Text style={styles.UserName}>{displayName}</Text>
+            <Text style={styles.UserEmail}>{email}</Text>
           </View>
         </View>
-        {params && (
+        {postData && (
           <View style={styles.cardContainer}>
             <View style={styles.imageContainer}>
               <Image source={{ uri: photoUri }} style={styles.image} />

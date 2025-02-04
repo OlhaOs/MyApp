@@ -4,7 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import AuthNavigator from './src/navigation/AuthNavigation';
-import { Provider, useDispatch } from 'react-redux';
+import BottomTabNavigator from './src/navigation/BottomTabNavigator';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import store from './src/redux/store/store';
 import { Text } from 'react-native-svg';
@@ -33,7 +34,7 @@ export default function App() {
 
 const AuthListener = () => {
   const dispatch = useDispatch();
-  // const user = useSelector((state) => state.user.userInfo);
+  const user = useSelector((state) => state.user.userInfo);
 
   useEffect(() => {
     authStateChanged(dispatch);
@@ -41,7 +42,8 @@ const AuthListener = () => {
 
   return (
     <NavigationContainer>
-      <AuthNavigator />
+      {user ? (<BottomTabNavigator />) : (<AuthNavigator />)}
+
       <StatusBar style='auto' backgroundColor='transparent' />
     </NavigationContainer>
   );
