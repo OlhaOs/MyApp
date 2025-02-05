@@ -13,46 +13,31 @@ import Avatar from '../components/Avatar';
 import Comment from '../../assets/icons/Comment';
 import LocationIcon from '../../assets/icons/LocationIcon';
 import img1 from '../../assets/images/Content Block 2.jpg';
-import img2 from '../../assets/images/Content Block.jpg';
 import { useSelector } from 'react-redux';
-import { getPosts } from '../utils/firestore';
+import { getAllPosts } from '../utils/firestore';
 
 
 export default function PostsScreen({ navigation }) {
-  const [postData, setPostData] = useState(null);
+  const [posts, setPosts] = useState([]);
+
   const user = useSelector(state => state.user.userInfo);
 
   useEffect(() => {
-
-    const fetchPostData = async () => {
-      if (user?.uid) {
-         const post = await getPosts(user.uid);
-          setPostData(post);
-      }
+    const fetchPosts = async () => {
+      const allPosts = await getAllPosts();
+      setPosts(allPosts);
     };
 
-    fetchPostData();
-  }, [user?.uid]);
+    fetchPosts();
+  }, []);
 
-  if (!postData) {
-    return (
-      <View style={styles.container}>
-        <Text>Завантаження...</Text>
-      </View>
-    );
-  }
+  const { name: displayName, email } = user || {};
 
-  const { name: displayName, email, photoURL } = user || {};
-
-  const { titlePhoto, locationName, photoUri, latitude, longitude } = postData;
-
-  const onComment = () => {
-    navigation.navigate('Comment');
-
-
+  const onComment = (id, photoUri) => {
+    navigation.navigate('Comment', { postId: id, photoUri });
   };
 
-  const onMap = () => {
+  const onMap = (latitude, longitude) => {
     navigation.navigate('Map', { latitude, longitude })
   };
   return (
@@ -66,28 +51,27 @@ export default function PostsScreen({ navigation }) {
             <Text style={styles.UserEmail}>{email}</Text>
           </View>
         </View>
-        {postData && (
-          <View style={styles.cardContainer}>
-            <View style={styles.imageContainer}>
-              <Image source={{ uri: photoUri }} style={styles.image} />
-            </View>
-            <Text style={styles.smallText}>{titlePhoto}</Text>
-            <View style={styles.detailsContainer}>
-              <View style={styles.details}>
-                <View style={styles.comment}>
-                  <TouchableOpacity onPress={onComment}>
-                    <Comment fill='none' stroke={colors.border_gray} />
-                  </TouchableOpacity>
-                  <Text>0</Text>
-                </View>
+        {posts.length > 0 ? (
+          posts.map(post => (
+            <View key={post.id} style={styles.cardContainer}>
+              <View style={styles.imageContainer}>
+                <Image source={{ uri: post.photoUri }} style={styles.imagePost} />
               </View>
-
-              <TouchableOpacity onPress={onMap} style={styles.comment}>
-                <LocationIcon />
-                <Text style={styles.textLocation}>{locationName}</Text>
-              </TouchableOpacity>
+              <Text style={styles.smallText}>{post.titlePhoto}</Text>
+              <View style={styles.detailsContainer}>
+                <TouchableOpacity onPress={() => onComment(post.id, post.photoUri)} style={styles.comment}>
+                  <Comment fill='none' stroke={colors.border_gray} />
+                  <Text>0</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => onMap(post.latitude, post.longitude)} style={styles.comment}>
+                  <LocationIcon />
+                  <Text style={styles.textLocation}>{post.locationName}</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          ))
+        ) : (
+          <Text>Немає постів</Text>
         )}
         <View style={styles.cardContainer}>
           <View style={styles.imageContainer}>
@@ -110,25 +94,7 @@ export default function PostsScreen({ navigation }) {
 
           </View>
         </View>
-        <View style={styles.cardContainer}>
-          <View style={styles.imageContainer}>
-            <Image source={img2} style={styles.image}></Image>
-          </View>
-          <Text style={styles.smallText}>Захід на Чорному морі</Text>
-          <View style={styles.detailsContainer}>
-            <View style={styles.details}>
-              <View style={styles.comment}>
-                <Comment fill='none' stroke={colors.border_gray} />
-                <Text>0</Text>
-              </View>
-            </View>
-            <TouchableOpacity onPress={onMap} style={styles.comment}>
-              <LocationIcon />
-              <Text style={styles.textLocation}> Ukraine</Text>
-            </TouchableOpacity>
 
-          </View>
-        </View>
       </View>
     </ScrollView>
   );
@@ -170,7 +136,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     height: 240,
   },
-  image: {
+  imagePost: {
     width: '100%',
     height: 240,
     borderRadius: 8,

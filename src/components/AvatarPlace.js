@@ -7,7 +7,7 @@ import { colors } from '../../styles/global';
 export default function AvatarPlace({ icon, isAvatar }) {
   return (
     <View style={styles.containerAvatar}>
-      {isAvatar && <Image source={isAvatar} />}
+      {isAvatar && <Image source={isAvatar} style={styles.imageAva} />}
       <SmallButton icon={icon} />
     </View>
   );
@@ -20,9 +20,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light_gray,
     borderRadius: 16,
 
+
     position: 'absolute',
     top: -60,
     left: '50%',
     transform: [{ translateX: -60 + 16 }],
   },
+  imageAva: {
+    borderRadius: 16,
+  }
 });

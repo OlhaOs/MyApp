@@ -38,11 +38,11 @@ const BottomTabNavigator = () => {
         },
         tabBarShowLabel: false,
         tabBarStyle: {
-          paddingLeft: 100,
+          paddingLeft: 82,
+          paddingRight: 82,
           paddingTop: 8,
           paddingBottom: 8,
           display: 'flex',
-
         },
       })}
     >
@@ -99,7 +99,7 @@ const BottomTabNavigator = () => {
         }}
       />
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name='Comment'
         component={CommentsScreen}
 
@@ -116,9 +116,9 @@ const BottomTabNavigator = () => {
           )
         })}
 
-      />
+      /> */}
 
-      <Tab.Screen
+      {/* <Tab.Screen
         name='Map'
         component={MapScreen}
 
@@ -134,42 +134,12 @@ const BottomTabNavigator = () => {
             </TouchableOpacity>
           ),
         })}
-      />
+      /> */}
 
     </Tab.Navigator >
   );
 };
 
-const styles = StyleSheet.create({
-  addButton: {
-    width: 70,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.orange,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconContainer: {
-    width: 70,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.light_gray,
-    justifyContent: 'center',
-    alignItems: 'center',
 
-  },
-  focusedContainer: {
-    backgroundColor: colors.orange,
-
-  },
-  text: {
-    flex: 1,
-
-    textAlign: 'center',
-    fontSize: 16,
-    color: '#333',
-    fontFamily: 'Roboto-Medium',
-  },
-});
 
 export default BottomTabNavigator;

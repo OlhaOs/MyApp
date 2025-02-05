@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db, storage } from '../../config';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
@@ -35,11 +35,11 @@ export const getUser = async (userId) => {
     }
 };
 
-export const getPosts = async (userId) => {
+export const getPosts = async (id) => {
 
-    console.log("Fetching post for user:", userId);
-    const docRef = doc(db, 'posts', userId);
+    const docRef = doc(db, 'posts', id);
     const docSnap = await getDoc(docRef);
+
 
     if (docSnap.exists()) {
         console.log('Post data:', docSnap.data());
@@ -49,6 +49,35 @@ export const getPosts = async (userId) => {
         return null;
     }
 }
+
+export const getPostsByUserId = async (userId) => {
+    try {
+        const postsRef = collection(db, 'posts');
+        const q = query(postsRef, where('userId', '==', userId));
+        const querySnapshot = await getDocs(q);
+
+        const posts = [];
+        querySnapshot.forEach((doc) => {
+            posts.push({ id: doc.id, ...doc.data() });
+        });
+
+        return posts;
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        return [];
+    }
+};
+
+export const getAllPosts = async () => {
+    try {
+        const querySnapshot = await getDocs(collection(db, "posts"));
+        const posts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return posts;
+    } catch (error) {
+        console.error("Помилка отримання постів:", error);
+        return [];
+    }
+};
 
 // Функція для запису даних користувача у Firestore
 export const updateUserInFirestore = async (uid, data) => {
@@ -83,4 +112,44 @@ export const uploadImage = async (
 export const getImageUrl = async (imageRef) => {
     const url = await getDownloadURL(imageRef);
     return url;
+};
+
+// Функція для додавання коментаря до публікації
+export const addComment = async (postId, comment) => {
+    try {
+
+        const postData = await getPosts(postId);
+
+        if (postData) {
+
+            const currentComments = postData.comments || [];
+            currentComments.push(comment);
+
+
+            const postRef = doc(db, 'posts', postId);
+            await updateDoc(postRef, { comments: currentComments }, { merge: true });
+
+            console.log('Comment added to post:', postId);
+        } else {
+            console.log('Post not found!');
+        }
+    } catch (error) {
+        console.error('Error adding comment:', error);
+    }
+};
+
+// Функція для отримання коментарів поста
+export const getComments = async (postId) => {
+    try {
+        const postData = await getPosts(postId);
+        if (postData) {
+            return postData.comments || [];
+        } else {
+            console.log('Post not found!');
+            return [];
+        }
+    } catch (error) {
+        console.error('Error getting comments:', error);
+        return [];
+    }
 };

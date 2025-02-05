@@ -1,10 +1,12 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import userReducer from '../reducers/userSlice';
-// імпортуйте інші ред'юсери
+import postReduser from '../reducers/postSlice';
+
 
 const rootReducer = combineReducers({
     user: userReducer,
-    // додайте інші ред'юсери
+    posts: postReduser,
+ 
 });
 
 export default rootReducer;

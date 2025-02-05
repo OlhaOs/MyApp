@@ -22,12 +22,17 @@ import InputField from '../components/InputField';
 import MainButton from '../components/MainButton';
 import HomeIndicator from '../components/HomeIndicator';
 import ToggleCamera from '../../assets/icons/ToggleCamera';
-import { addPost, getPosts, uploadImage } from "../utils/firestore";
-import { useSelector } from "react-redux";
+import { addPost, uploadImage } from "../utils/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "../redux/reducers/postSlice";
 
 import { nanoid } from '@reduxjs/toolkit';
 
 export default function CreatePostsScreen({ route, navigation }) {
+  const user = useSelector((state) => state.user.userInfo);
+  // const postData = useSelector((state) => state.posts.posts);
+  // const dispatch = useDispatch();
+
   const [postData, setPostData] = useState({
     titlePhoto: '',
     locationName: '',
@@ -35,12 +40,13 @@ export default function CreatePostsScreen({ route, navigation }) {
     latitude: null,
     longitude: null,
   });
+
   const [facing, setFacing] = useState('back');
   const [permission, requestPermission] = useCameraPermissions();
   const [libraryPermission, requestLibraryPermission] = MediaLibrary.usePermissions();
   const camera = useRef();
-  const user = useSelector((state) => state.user.userInfo);
-  const { titlePhoto, locationName, photoUri, latitude, longitude } = postData;
+
+  const { titlePhoto, locationName, photoUri, latitude, longitude } = postData || {};
 
   if (!permission) {
     return <View />;
@@ -70,7 +76,6 @@ export default function CreatePostsScreen({ route, navigation }) {
       ...prevState,
       photoUri: image.uri,
     }));
-
   };
   const editPhoto = () => {
     setPostData((prevState) => ({
@@ -78,6 +83,7 @@ export default function CreatePostsScreen({ route, navigation }) {
       photoUri: null,
     }));
   };
+
   const onPosts = async () => {
     if (!isFormComplete) return;
 
@@ -110,6 +116,8 @@ export default function CreatePostsScreen({ route, navigation }) {
       [field]: value,
     }));
   };
+
+
   const onClearData = () => {
     setPostData({
       titlePhoto: '',
@@ -118,6 +126,7 @@ export default function CreatePostsScreen({ route, navigation }) {
 
     });
   };
+
   const uploadImageToStorage = async () => {
     if (!photoUri) return;
 
@@ -143,7 +152,7 @@ export default function CreatePostsScreen({ route, navigation }) {
       const imageUrl = await uploadImageToStorage();
       const postId = nanoid()
 
-      await addPost(user?.uid, {
+      await addPost(postId, {
         locationName,
         id: postId,
         photoUri: imageUrl,
@@ -154,7 +163,6 @@ export default function CreatePostsScreen({ route, navigation }) {
       });
 
       Alert.alert('Пост успішно створено!');
-
       navigation.navigate('Posts');
       onClearData();
     } catch (error) {
