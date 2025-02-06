@@ -19,7 +19,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "process.env.EXPO_PUBLIC_ANDROID_PACKAGE"
+    },
+    "config": {
+      "googleMapsApiKey": "process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
     },
     "web": {
       "favicon": "./assets/favicon.png"

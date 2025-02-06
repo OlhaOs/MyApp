@@ -1,31 +1,29 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
+import { colors } from '../../styles/global';
 
-export default function MainButton({ textButton }) {
+export default function MainButton({ textButton, onPress, outer, textOuter }) {
   return (
-    <Pressable
-      style={styles.button}
-      onPress={() => console.log('press on btn')}
-    >
-      <Text style={styles.textButton}>{textButton}</Text>
+    <Pressable style={[styles.button, outer]} onPress={onPress}>
+      <Text style={[styles.textButton, textOuter]}>{textButton}</Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    width: 343,
+    width: '100%',
     height: 51,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 43,
     marginBottom: 16,
 
-    backgroundColor: '#FF6C00',
+    backgroundColor: colors.orange,
     borderRadius: 100,
   },
   textButton: {
-    color: 'white',
+    color: colors.white,
     fontFamily: 'Roboto-Regular',
     fontSize: 16,
   },
